@@ -9,9 +9,9 @@
 # Test coverage
 /coverage/
 
-# Environment variables
-.env*
-!.env.example
+# # Environment variables
+# .env*
+# !.env.example
 
 # TypeScript
 *.tsbuildinfo
