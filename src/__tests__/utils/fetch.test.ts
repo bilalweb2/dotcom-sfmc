@@ -5,6 +5,7 @@ describe("common fetch helpers", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useRealTimers();
     global.fetch = mockFetch;
   });
 
@@ -24,14 +25,52 @@ describe("common fetch helpers", () => {
 
       expect(mockFetch).toHaveBeenCalledWith(
         "/ftr-forms/api/DecodeEMEID?EMEID=encoded%2Bid&CUHID=customer+id",
-        { signal: controller.signal },
+        { signal: expect.any(AbortSignal) },
       );
+      expect(mockFetch.mock.calls[0][1].signal).not.toBe(controller.signal);
     });
 
     it("returns undefined when the API rejects the decode request", async () => {
       mockFetch.mockResolvedValueOnce({ ok: false });
 
       await expect(fetchDecodedEmail("encoded-id")).resolves.toBeUndefined();
+    });
+
+    it("rejects with a timeout error when the request does not complete", async () => {
+      jest.useFakeTimers();
+      mockFetch.mockImplementationOnce(
+        (_url: string, { signal }: RequestInit) =>
+          new Promise((_, reject) => {
+            signal?.addEventListener("abort", () => {
+              reject(new DOMException("The operation was aborted", "AbortError"));
+            });
+          }),
+      );
+
+      const request = fetchDecodedEmail("encoded-id");
+      const timeoutAssertion = expect(request).rejects.toThrow(
+        "Request timed out. Please try again.",
+      );
+      await jest.advanceTimersByTimeAsync(10_000);
+
+      await timeoutAssertion;
+    });
+
+    it("preserves caller-triggered cancellation as an abort", async () => {
+      const controller = new AbortController();
+      mockFetch.mockImplementationOnce(
+        (_url: string, { signal }: RequestInit) =>
+          new Promise((_, reject) => {
+            signal?.addEventListener("abort", () => {
+              reject(new DOMException("The operation was aborted", "AbortError"));
+            });
+          }),
+      );
+
+      const request = fetchDecodedEmail("encoded-id", "", controller.signal);
+      controller.abort();
+
+      await expect(request).rejects.toMatchObject({ name: "AbortError" });
     });
   });
 
@@ -46,6 +85,7 @@ describe("common fetch helpers", () => {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: "EmailAddress=test%40example.com",
+        signal: expect.any(AbortSignal),
       });
     });
 
@@ -69,6 +109,26 @@ describe("common fetch helpers", () => {
       await expect(
         postForm("/api/submit", new URLSearchParams()),
       ).rejects.toThrow("Unsubscribe request failed");
+    });
+
+    it("rejects with a timeout error when the request does not complete", async () => {
+      jest.useFakeTimers();
+      mockFetch.mockImplementationOnce(
+        (_url: string, { signal }: RequestInit) =>
+          new Promise((_, reject) => {
+            signal?.addEventListener("abort", () => {
+              reject(new DOMException("The operation was aborted", "AbortError"));
+            });
+          }),
+      );
+
+      const request = postForm("/api/submit", new URLSearchParams());
+      const timeoutAssertion = expect(request).rejects.toThrow(
+        "Request timed out. Please try again.",
+      );
+      await jest.advanceTimersByTimeAsync(10_000);
+
+      await timeoutAssertion;
     });
   });
 });
