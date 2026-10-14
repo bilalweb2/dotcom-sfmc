@@ -1,0 +1,61 @@
+{
+  "name": "sfmc",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next build && next start",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "next typegen && tsc --noEmit",
+    "ts:validate": "npm run type-check",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "quality": "npm run lint && npm run format:check && npm run type-check && npm test",
+    "prebuild:check": "npm run lint && npm run type-check && npm run test:coverage",
+    "prepare": "husky",
+    "audit": "npm audit --audit-level=moderate --omit=dev",
+    "audit:fix": "npm audit fix",
+    "audit:ci": "npm audit --audit-level=high --omit=dev --json"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.8.2"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "applicationinsights": "^3.16.0",
+    "mongoose": "^9.10.2",
+    "newrelic": "^14.5.1",
+    "next": "16.3.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.89.0",
+    "zod": "^4.6.5"
+  },
+  "overrides": {
+    "braces": ">=3.0.3"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/user-event": "^14.6.7",
+    "@testing-library/react": "^16.3.3",
+    "@types/jest": "^30.0.0",
+    "@types/mongoose": "^5.11.96",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.6",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "prettier": "^3.9.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}

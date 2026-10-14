@@ -1,0 +1,1 @@
+export { WHWFConfirmationPage } from "./WHWFConfirmationPage";

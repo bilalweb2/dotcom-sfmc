@@ -1,0 +1,169 @@
+/* Matches cloud.e.frontier.com/Unsubscribe-form (lp_css form-section / intro-title / mktoForm). */
+
+.section {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 80px 0;
+  position: relative;
+}
+
+.column {
+  width: 66.666667%;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.heading {
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-weight: 400;
+  color: #141928;
+  font-size: 42px;
+  line-height: 50px;
+  margin: 0;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+.subtext {
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-weight: 400;
+  color: #141928;
+  font-size: 20px;
+  line-height: 24px;
+  margin: 16px auto 46px;
+  max-width: 940px;
+  text-align: center;
+}
+
+.formWrap {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.fieldGroup {
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.label {
+  display: block;
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: #141928;
+  max-width: 95%;
+  margin: 0 0 8px 4px;
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  padding: 12px 16px;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #141928;
+  background-color: #f3f4f4;
+  border: 1px solid #8a8c94;
+  border-radius: 32px;
+  box-shadow: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #141928;
+}
+
+.inputError {
+  border-color: #d9312a;
+  background-color: #fff5f5;
+}
+
+.fieldError {
+  color: #d9312a;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 6px 0 0 4px;
+}
+
+.errorMessage {
+  color: #d9312a;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 0 0 12px 4px;
+  text-align: left;
+}
+
+.ctaButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  min-width: 226px;
+  margin: 0;
+  padding: 16px 32px;
+  background-color: #ff0037;
+  color: #fff;
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.72px;
+  text-transform: uppercase;
+  text-shadow: none;
+  border: none;
+  border-radius: 5em;
+  box-shadow: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.ctaButton:hover:not(:disabled),
+.ctaButton:focus:not(:disabled) {
+  background-color: #141928;
+  color: #fff;
+  opacity: 1;
+}
+
+.ctaButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (max-width: 992px) {
+  .formWrap {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .column {
+    width: 100%;
+  }
+}
+
+@media (max-width: 590px) {
+  .heading {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .ctaButton {
+    width: 100%;
+  }
+}

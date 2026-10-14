@@ -1,0 +1,35 @@
+# Dependencies
+/node_modules/
+
+# Next.js
+/.next/
+/out/
+/build/
+
+# Test coverage
+/coverage/
+
+# Environment variables
+.env*
+!.env.example
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+
+# Operating system and editor files
+.DS_Store
+.vscode/

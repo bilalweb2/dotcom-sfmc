@@ -1,0 +1,58 @@
+/* ── NotFound (404) page ──────────────────────────────────────────── */
+
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px 100px;
+  min-height: 480px;
+  background-color: #fff;
+}
+
+.container {
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+}
+
+.code {
+  font-size: 7rem;
+  font-weight: 700;
+  color: #cc0000;
+  line-height: 1;
+  margin: 0 0 16px;
+  letter-spacing: -4px;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.subtext {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 36px;
+}
+
+.ctaButton {
+  display: inline-block;
+  background-color: #cc0000;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 12px 36px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.ctaButton:hover {
+  background-color: #a80000;
+}
