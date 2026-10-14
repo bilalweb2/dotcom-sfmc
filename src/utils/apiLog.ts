@@ -87,7 +87,7 @@ export async function logApiExchange(
   };
 
   logger.info("API call", record);
- if (!options.skipMongoDB) {
+  if (!options.skipMongoDB) {
     await sendToMongoDB(entry, requestBody, responseBody);
   }
   await sendToAzure(entry, requestBody, responseBody);

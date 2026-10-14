@@ -46,22 +46,22 @@ export function withErrorHandler(handler: RouteHandler): RouteHandler {
       request.headers.get("x-request-id") ?? crypto.randomUUID();
     const requestBody = await readBody(request.clone());
 
-     const record = async (
+    const record = async (
       status: number,
       responseBody: string,
       options?: { skipMongoDB?: boolean },
     ) => {
       await logApiExchange(
         {
-        method: request.method,
-        path: request.nextUrl.pathname,
-        query: request.nextUrl.search,
-        status,
-        durationMs: Date.now() - started,
-        requestBody,
-        responseBody,
-        requestId,
-       },
+          method: request.method,
+          path: request.nextUrl.pathname,
+          query: request.nextUrl.search,
+          status,
+          durationMs: Date.now() - started,
+          requestBody,
+          responseBody,
+          requestId,
+        },
         options,
       );
     };
@@ -83,7 +83,7 @@ export function withErrorHandler(handler: RouteHandler): RouteHandler {
       });
 
       const body = {
-       error: databaseUnavailable
+        error: databaseUnavailable
           ? "Database temporarily unavailable"
           : "Internal Server Error",
         timestamp: new Date().toISOString(),

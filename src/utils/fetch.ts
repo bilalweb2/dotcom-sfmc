@@ -16,7 +16,8 @@ async function withFetchTimeout<T>(
 ): Promise<T> {
   const controller = new AbortController();
   let timedOut = false;
-  const abortFromExternalSignal = () => controller.abort(externalSignal?.reason);
+  const abortFromExternalSignal = () =>
+    controller.abort(externalSignal?.reason);
 
   if (externalSignal?.aborted) {
     abortFromExternalSignal();

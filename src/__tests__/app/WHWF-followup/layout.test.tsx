@@ -41,9 +41,7 @@ describe("WHWFLayout", () => {
   });
 
   it("renders the layout shell when children are empty", () => {
-    render(
-      <WHWFLayout params={Promise.resolve({})}>{null}</WHWFLayout>,
-    );
+    render(<WHWFLayout params={Promise.resolve({})}>{null}</WHWFLayout>);
 
     expect(screen.getByRole("main")).toBeEmptyDOMElement();
     expect(screen.getByRole("banner")).toBeInTheDocument();

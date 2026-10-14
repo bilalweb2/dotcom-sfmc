@@ -42,7 +42,9 @@ describe("common fetch helpers", () => {
         (_url: string, { signal }: RequestInit) =>
           new Promise((_, reject) => {
             signal?.addEventListener("abort", () => {
-              reject(new DOMException("The operation was aborted", "AbortError"));
+              reject(
+                new DOMException("The operation was aborted", "AbortError"),
+              );
             });
           }),
       );
@@ -62,7 +64,9 @@ describe("common fetch helpers", () => {
         (_url: string, { signal }: RequestInit) =>
           new Promise((_, reject) => {
             signal?.addEventListener("abort", () => {
-              reject(new DOMException("The operation was aborted", "AbortError"));
+              reject(
+                new DOMException("The operation was aborted", "AbortError"),
+              );
             });
           }),
       );
@@ -117,7 +121,9 @@ describe("common fetch helpers", () => {
         (_url: string, { signal }: RequestInit) =>
           new Promise((_, reject) => {
             signal?.addEventListener("abort", () => {
-              reject(new DOMException("The operation was aborted", "AbortError"));
+              reject(
+                new DOMException("The operation was aborted", "AbortError"),
+              );
             });
           }),
       );

@@ -59,7 +59,7 @@ export async function connectMongoose(): Promise<typeof mongoose> {
       uri: mongoUri.replace(/:\/\/.*@/, "://***@"),
     });
     cache.promise = mongoose
-       .connect(mongoUri, {
+      .connect(mongoUri, {
         bufferCommands: false,
         serverSelectionTimeoutMS: SERVER_SELECTION_TIMEOUT_MS,
       })

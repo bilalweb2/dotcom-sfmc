@@ -13,7 +13,7 @@ import { GET } from "@/app/api/health/route";
 import { connectMongoose } from "@/libs/mongoose";
 
 describe("GET /ftr-forms/api/health", () => {
-   beforeEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 

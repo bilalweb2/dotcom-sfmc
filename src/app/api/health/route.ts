@@ -40,7 +40,7 @@ export const dynamic = "force-dynamic";
 
 export const GET = withErrorHandler(async () => {
   await connectMongoose();
-  
+
   return NextResponse.json({
     status: "ok",
     app: APP_NAME,
