@@ -20,6 +20,7 @@ import {
   unsubscribeSchema,
   type UnsubscribeFormValues,
 } from "@/utils/unsubscribeValidation";
+import { fetchDecodedEmail, postForm } from "@/utils/fetch";
 import { API_ROUTES } from "@/constants";
 import styles from "./UnsubscribePage.module.css";
 
@@ -56,17 +57,7 @@ export function UnsubscribePage() {
     async function decodeEmail() {
       setIsDecodingEmail(true);
       try {
-        const url = new URL(API_ROUTES.DECODE_EMEID, window.location.origin);
-        url.searchParams.set("EMEID", EMEID);
-        if (CUHID) url.searchParams.set("CUHID", CUHID);
-
-        const res = await fetch(url.toString(), { signal: controller.signal });
-        if (!res.ok) return;
-
-        const json = (await res.json()) as {
-          data?: { decoded?: string };
-        };
-        const email = json?.data?.decoded ?? "";
+        const email = await fetchDecodedEmail(EMEID, CUHID, controller.signal);
         if (email) setValue("email", email, { shouldValidate: true });
       } catch {
         // AbortError is expected on unmount; silently ignore all decode failures
@@ -94,17 +85,7 @@ export function UnsubscribePage() {
     });
 
     try {
-      const res = await fetch(API_ROUTES.UNSUB_FORM, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
-      });
-
-      if (!res.ok) {
-        const errorData = (await res.json()) as { error?: string };
-        throw new Error(errorData.error ?? "Unsubscribe request failed");
-      }
-
+      await postForm(API_ROUTES.UNSUB_FORM, body);
       router.push("/Unsubscribe-Confirmation");
     } catch (error) {
       setError("root", {

@@ -4,9 +4,7 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import WHWFConfirmation, {
-  metadata,
-} from "@/app/WHWF-Confirmation/page";
+import WHWFConfirmation, { metadata } from "@/app/WHWF-Confirmation/page";
 
 describe("WHWFConfirmation page", () => {
   it("exports the expected page metadata", () => {
@@ -26,7 +24,9 @@ describe("WHWFConfirmation page", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/self-installation kit should be delivered within 5-7 business days/i),
+      screen.getByText(
+        /self-installation kit should be delivered within 5-7 business days/i,
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getByText("Enjoy Wi-Fi coverage where you need it."),

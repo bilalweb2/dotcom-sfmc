@@ -69,7 +69,10 @@ export function sanitizeBody(raw: string): string {
  * Records one API call. Console logging always runs.
  * Azure and New Relic receive the same record when each is configured.
  */
-export async function logApiExchange(entry: ApiExchangeLog): Promise<void> {
+export async function logApiExchange(
+  entry: ApiExchangeLog,
+  options: { skipMongoDB?: boolean } = {},
+): Promise<void> {
   const requestBody = sanitizeBody(String(entry.requestBody));
   const responseBody = sanitizeBody(String(entry.responseBody));
   const record = {
@@ -84,7 +87,9 @@ export async function logApiExchange(entry: ApiExchangeLog): Promise<void> {
   };
 
   logger.info("API call", record);
-  await sendToMongoDB(entry, requestBody, responseBody);
+  if (!options.skipMongoDB) {
+    await sendToMongoDB(entry, requestBody, responseBody);
+  }
   await sendToAzure(entry, requestBody, responseBody);
   await sendToNewRelic(record);
 }
