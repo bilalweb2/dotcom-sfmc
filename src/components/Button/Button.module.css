@@ -12,7 +12,9 @@
     background-color 0.2s,
     opacity 0.2s;
 }
-
+.test{
+  s
+}
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
