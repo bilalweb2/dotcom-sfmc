@@ -279,14 +279,14 @@
 }
 
 .offerHeading {
-  width: min(1180px, calc(100vw - 48px));
+  width: min(845px, calc(100vw - 48px));
   margin: 0 0 0 50%;
-  padding-bottom: 16px;
+  padding-bottom: 30px;
   transform: translateX(-50%);
   color: #141928;
   font-family: "ObjectSans-Bold", Verdana, sans-serif;
   font-size: 42px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.19;
 }
 
@@ -352,7 +352,7 @@
 
 .consentForm {
   width: 90%;
-  max-width: 800px;
+  max-width: 745px;
   margin: 0 auto;
   text-align: left;
 }
@@ -368,8 +368,8 @@
 
 .consentCheckbox {
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
+  width: 24px;
+  height: 24px;
   margin-top: 2px;
   accent-color: #ff0037;
   cursor: pointer;

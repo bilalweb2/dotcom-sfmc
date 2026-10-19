@@ -42,7 +42,9 @@ describe("SiteFooter", () => {
       ).toHaveLength(linkCount);
     }
 
-    expect(screen.getByRole("link", { name: "Fiber Internet" })).toHaveAttribute(
+    expect(
+      screen.getByRole("link", { name: "Fiber Internet" }),
+    ).toHaveAttribute(
       "href",
       "https://frontier.com/shop/internet/fiber-internet",
     );
@@ -75,6 +77,16 @@ describe("SiteFooter", () => {
     expect(
       within(legalNav).getByRole("link", { name: "Privacy Policy" }),
     ).toHaveAttribute("href", "https://frontier.com/corporate/privacy-policy");
+    expect(
+      within(legalNav).queryByRole("link", {
+        name: "CT, NE, TX Privacy Policy",
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(legalNav).queryByRole("link", {
+        name: "Broadband Consumer Labels",
+      }),
+    ).not.toBeInTheDocument();
 
     const socialLabels = ["X", "Facebook", "LinkedIn", "YouTube", "Instagram"];
     for (const label of socialLabels) {
@@ -83,18 +95,41 @@ describe("SiteFooter", () => {
       expect(socialLink).toHaveAttribute("rel", "noopener noreferrer");
       expect(socialLink.querySelector("img")).toHaveAttribute(
         "src",
-        expect.stringContaining("https://static.example.test/images/svg/social/"),
+        expect.stringContaining(
+          "https://static.example.test/images/svg/social/",
+        ),
       );
     }
 
-    expect(screen.getByText(`© ${new Date().getFullYear()} Verizon`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`© ${new Date().getFullYear()} Verizon`),
+    ).toBeInTheDocument();
+  });
+
+  it("renders live poll legal links only when enabled", () => {
+    render(<SiteFooter showLivePollLegalLinks />);
+
+    const legalNav = screen.getByRole("navigation", { name: "Footer legal" });
+    expect(within(legalNav).getAllByRole("link")).toHaveLength(8);
+    expect(
+      within(legalNav).getByRole("link", {
+        name: "CT, NE, TX Privacy Policy",
+      }),
+    ).toHaveAttribute("href", "https://frontier.com/corporate/ctnetx-privacy");
+    expect(
+      within(legalNav).getByRole("link", {
+        name: "Broadband Consumer Labels",
+      }),
+    ).toHaveAttribute("href", "https://frontier.com/consumerlabels");
   });
 
   it("uses a relative social image path when no public app URL is configured", () => {
     // delete process.env.NEXT_PUBLIC_APP_URL;
     render(<SiteFooter />);
 
-    expect(screen.getByRole("link", { name: "X" }).querySelector("img")).toHaveAttribute(
+    expect(
+      screen.getByRole("link", { name: "X" }).querySelector("img"),
+    ).toHaveAttribute(
       "src",
       expect.stringContaining("/images/svg/social/x.svg"),
     );

@@ -42,9 +42,7 @@ describe("SiteHeader", () => {
     expect(
       within(audienceNavigation).getByRole("link", { name: "Residential" }),
     ).toHaveAttribute("href", "https://frontier.com/");
-    expect(
-      within(audienceNavigation).getAllByRole("link"),
-    ).toHaveLength(4);
+    expect(within(audienceNavigation).getAllByRole("link")).toHaveLength(4);
 
     const siteNavigation = screen.getByRole("navigation", {
       name: "Site Navigation",
@@ -61,7 +59,10 @@ describe("SiteHeader", () => {
     expect(
       within(siteNavigation)
         .getAllByRole("link", { name: "Deals" })
-        .find((link) => link.getAttribute("href") === "https://frontier.com/shop/deals"),
+        .find(
+          (link) =>
+            link.getAttribute("href") === "https://frontier.com/shop/deals",
+        ),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Sign In/Register", hidden: true }),
@@ -74,8 +75,27 @@ describe("SiteHeader", () => {
       name: "Frontier, a Verizon Company",
     });
     expect(logoLink.querySelectorAll("img")).toHaveLength(2);
-    expect(logoLink.querySelector('img[src="/images/svg/site-desktop-logo-verizon.svg"]')).toBeInTheDocument();
-    expect(logoLink.querySelector('img[src="/images/svg/site-mobile-logo-verizon.svg"]')).toBeInTheDocument();
+    expect(
+      logoLink.querySelector(
+        'img[src="/images/svg/site-desktop-logo-verizon.svg"]',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      logoLink.querySelector(
+        'img[src="/images/svg/site-mobile-logo-verizon.svg"]',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("hides the audience bar when requested", () => {
+    render(<SiteHeader showAudienceBar={false} />);
+
+    expect(
+      screen.queryByRole("navigation", { name: "Audience" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("navigation", { name: "Site Navigation" }),
+    ).toBeInTheDocument();
   });
 
   it("toggles the mobile menu and resets any open submenu", () => {
@@ -147,7 +167,10 @@ describe("SiteHeader", () => {
     fireEvent.click(
       screen
         .getAllByRole("link", { name: "Deals" })
-        .find((link) => link.getAttribute("href") === "https://frontier.com/shop/deals")!,
+        .find(
+          (link) =>
+            link.getAttribute("href") === "https://frontier.com/shop/deals",
+        )!,
     );
 
     expect(screen.getByRole("button", { name: "Open menu" })).toHaveAttribute(

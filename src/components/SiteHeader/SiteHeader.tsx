@@ -139,7 +139,11 @@ function Caret() {
 
 const basePath = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
-export function SiteHeader() {
+export function SiteHeader({
+  showAudienceBar = true,
+}: {
+  showAudienceBar?: boolean;
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -163,25 +167,27 @@ export function SiteHeader() {
 
   return (
     <div className={`${styles.root}${scrolled ? ` ${styles.scrolled}` : ""}`}>
-      <div className={styles.topbar}>
-        <nav className={styles.topbarInner} aria-label="Audience">
-          {audienceLinks.map(({ label, href, active }) => (
-            <a
-              key={label}
-              href={href}
-              className={
-                active
-                  ? `${styles.topLink} ${styles.topLinkActive}`
-                  : styles.topLink
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
-      </div>
+      {showAudienceBar && (
+        <div className={styles.topbar}>
+          <nav className={styles.topbarInner} aria-label="Audience">
+            {audienceLinks.map(({ label, href, active }) => (
+              <a
+                key={label}
+                href={href}
+                className={
+                  active
+                    ? `${styles.topLink} ${styles.topLinkActive}`
+                    : styles.topLink
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
 
       <header className={styles.header}>
         <div className={styles.bar}>

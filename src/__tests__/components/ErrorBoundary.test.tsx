@@ -44,7 +44,9 @@ describe("ErrorBoundary", () => {
       screen.getByRole("heading", { name: "Something went wrong" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Render failed")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Try again" }),
+    ).toBeInTheDocument();
     expect(consoleError).toHaveBeenCalledWith(
       "[ErrorBoundary] Uncaught error:",
       expect.objectContaining({ message: "Render failed" }),

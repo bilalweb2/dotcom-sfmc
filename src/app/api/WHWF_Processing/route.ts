@@ -82,6 +82,8 @@
  *         description: Validation error
  *       500:
  *         description: Internal server error
+ *       503:
+ *         description: MongoDB is temporarily unavailable
  */
 
 import { NextResponse, type NextRequest } from "next/server";

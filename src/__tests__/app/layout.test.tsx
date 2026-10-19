@@ -59,8 +59,12 @@ describe("RootDocumentLayout", () => {
     });
     const markup = renderToStaticMarkup(layout);
 
-    expect(markup).toContain('url("/ftr-forms/fonts/ObjectSans-Regular.woff2")');
-    expect(markup).toContain('url("/ftr-forms/fonts/object-sans-regular.woff")');
+    expect(markup).toContain(
+      'url("/ftr-forms/fonts/ObjectSans-Regular.woff2")',
+    );
+    expect(markup).toContain(
+      'url("/ftr-forms/fonts/object-sans-regular.woff")',
+    );
     expect(markup).toContain("<p>Form page</p>");
   });
 });

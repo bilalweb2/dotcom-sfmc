@@ -145,10 +145,8 @@ export function WHWFPage({ pageName }: WHWFPageProps) {
       <section className={styles.offer} aria-label="Offer details">
         <div className={styles.offerInner}>
           <h2 className={styles.offerHeading}>
-            Extend the Wi-Fi coverage in your home- Pay{" "}
-            <span className={styles.headingLine}>
+            Extend the Wi-Fi coverage in your home- Pay
               $0 for the first month, then only $10/mo. after*
-            </span>
           </h2>
 
           <div className={styles.featureBlock}>

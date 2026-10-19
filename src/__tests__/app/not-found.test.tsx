@@ -28,7 +28,9 @@ describe("NotFound page", () => {
       screen.getByRole("heading", { name: "Page not found" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("The page you're looking for doesn't exist or may have been moved."),
+      screen.getByText(
+        "The page you're looking for doesn't exist or may have been moved.",
+      ),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Go to Home" })).toHaveAttribute(
       "href",

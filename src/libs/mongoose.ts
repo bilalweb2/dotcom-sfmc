@@ -12,6 +12,8 @@
 import mongoose from "mongoose";
 import logger from "@/logger";
 
+const SERVER_SELECTION_TIMEOUT_MS = 10_000;
+
 function getMongoUri(): string {
   const uri = process.env.MONGODB_URI ?? "";
   if (!uri) {
@@ -57,7 +59,10 @@ export async function connectMongoose(): Promise<typeof mongoose> {
       uri: mongoUri.replace(/:\/\/.*@/, "://***@"),
     });
     cache.promise = mongoose
-      .connect(mongoUri, { bufferCommands: false })
+      .connect(mongoUri, {
+        bufferCommands: false,
+        serverSelectionTimeoutMS: SERVER_SELECTION_TIMEOUT_MS,
+      })
       .then((conn) => {
         logger.info("MongoDB connected successfully", {
           host: conn.connection.host,

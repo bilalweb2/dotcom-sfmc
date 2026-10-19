@@ -26,6 +26,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Keep Turbopack's workspace scan scoped to this app, not parent directories.
+  turbopack: {
+    root: process.cwd(),
+  },
+
   // Context path prefix for all UI and API routes (configurable via BASE_PATH env var)
   basePath: process.env.BASE_PATH ?? "/ftr-forms",
 

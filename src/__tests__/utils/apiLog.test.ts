@@ -24,6 +24,11 @@ jest.mock("@/libs/newRelic", () => ({
 
 jest.mock("@/logger", () => ({
   __esModule: true,
+  maskEmail: jest.fn((email: string | null | undefined) => {
+    if (!email) return "[no email]";
+    return `${email[0]}***@${email.split("@")[1] ?? "[unknown]"}`;
+  }),
+  maskPhone: jest.fn(() => "***-***-1234"),
   default: {
     info: jest.fn(),
     warn: jest.fn(),
@@ -33,11 +38,13 @@ jest.mock("@/logger", () => ({
 }));
 
 import { connectMongoose } from "@/libs/mongoose";
+import { getAzureInsightsClient } from "@/libs/azureInsights";
+import { getNewRelicAgent } from "@/libs/newRelic";
 import { AuditLogModel } from "@/models/AuditLog";
 import { logApiExchange, sanitizeBody } from "@/utils/apiLog";
 
 describe("sanitizeBody", () => {
-  it("keeps a JSON request and redacts secrets", () => {
+  it("masks emails in JSON and redacts secrets", () => {
     const body = sanitizeBody(
       JSON.stringify({
         EmailAddress: "jane@example.com",
@@ -45,7 +52,8 @@ describe("sanitizeBody", () => {
       }),
     );
 
-    expect(body).toContain("jane@example.com");
+    expect(body).toContain("j***@example.com");
+    expect(body).not.toContain("jane@example.com");
     expect(body).toContain("[REDACTED]");
     expect(body).not.toContain("secret-token");
   });
@@ -55,9 +63,26 @@ describe("sanitizeBody", () => {
       "EmailAddress=jane%40example.com&password=hunter2",
     );
 
-    expect(body).toContain("EmailAddress=jane%40example.com");
+    expect(body).toContain("EmailAddress=j***%40example.com");
+    expect(body).not.toContain("jane%40example.com");
     expect(body).toContain("password=%5BREDACTED%5D");
     expect(body).not.toContain("hunter2");
+  });
+
+  it("masks emails and redacts secrets in form posts", () => {
+    const body = sanitizeBody("EmailAddress=jane%40example.com&token=hunter2");
+
+    expect(body).toContain("EmailAddress=j***%40example.com");
+    expect(body).toContain("token=%5BREDACTED%5D");
+    expect(body).not.toContain("jane%40example.com");
+    expect(body).not.toContain("hunter2");
+  });
+
+  it("masks emails embedded in free text", () => {
+    const body = sanitizeBody("Request for jane@example.com failed");
+
+    expect(body).toContain("j***@example.com");
+    expect(body).not.toContain("jane@example.com");
   });
 });
 
@@ -70,7 +95,7 @@ describe("logApiExchange", () => {
     await logApiExchange({
       method: "POST",
       path: "/ftr-forms/api/UnsubFormProcessing",
-      query: "?source=email",
+      query: "?source=email&EmailAddress=jane%40example.com",
       status: 200,
       durationMs: 42,
       requestBody: JSON.stringify({
@@ -85,12 +110,12 @@ describe("logApiExchange", () => {
     expect(AuditLogModel.create).toHaveBeenCalledWith({
       method: "POST",
       path: "/ftr-forms/api/UnsubFormProcessing",
-      query: "?source=email",
+      query: "?source=email&EmailAddress=j***%40example.com",
       status: 200,
       durationMs: 42,
       requestId: "req-123",
       request: {
-        EmailAddress: expect.stringContaining("jane@example.com"),
+        EmailAddress: "j***@example.com",
         token: "[REDACTED]",
       },
       response: { success: true },
@@ -98,7 +123,38 @@ describe("logApiExchange", () => {
     expect(AuditLogModel.create).toHaveBeenCalledWith(
       expect.objectContaining({
         request: expect.not.stringContaining("secret-token"),
+        query: expect.not.stringContaining("jane@example.com"),
       }),
     );
+  });
+
+  it("sends sanitized body and query data to telemetry", async () => {
+    const trackRequest = jest.fn();
+    const trackTrace = jest.fn();
+    const recordLogEvent = jest.fn();
+    (getAzureInsightsClient as jest.Mock).mockResolvedValue({
+      trackRequest,
+      trackTrace,
+    });
+    (getNewRelicAgent as jest.Mock).mockResolvedValue({ recordLogEvent });
+
+    await logApiExchange({
+      method: "POST",
+      path: "/api/submit",
+      query: "?EmailAddress=jane%40example.com",
+      status: 200,
+      durationMs: 5,
+      requestBody: JSON.stringify({ EmailAddress: "jane@example.com" }),
+      responseBody: JSON.stringify({ decoded: "jane@example.com" }),
+      requestId: "req-456",
+    });
+
+    const telemetry = JSON.stringify([
+      trackRequest.mock.calls,
+      trackTrace.mock.calls,
+      recordLogEvent.mock.calls,
+    ]);
+    expect(telemetry).toContain("j***@example.com");
+    expect(telemetry).not.toContain("jane@example.com");
   });
 });

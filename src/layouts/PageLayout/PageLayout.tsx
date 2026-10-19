@@ -18,6 +18,12 @@ import styles from "./PageLayout.module.css";
 interface PageLayoutProps extends PropsWithChildren {
   /** Set to false to suppress the SiteFooter on a specific route. Defaults to true. */
   showFooter?: boolean;
+  /** Set to false to hide the footer link columns while keeping its lower section. */
+  showFooterColumns?: boolean;
+  /** Set to true to include legal links specific to the live poll confirmation page. */
+  showLivePollLegalLinks?: boolean;
+  /** Set to false to hide the audience bar in the SiteHeader. */
+  showAudienceBar?: boolean;
   /** When true, main content sizes to its children instead of filling the viewport. */
   compact?: boolean;
 }
@@ -25,15 +31,23 @@ interface PageLayoutProps extends PropsWithChildren {
 export function PageLayout({
   children,
   showFooter = true,
+  showFooterColumns = true,
+  showLivePollLegalLinks = false,
+  showAudienceBar = true,
   compact = false,
 }: PageLayoutProps) {
   return (
     <div className={styles.wrapper}>
-      <SiteHeader />
+      <SiteHeader showAudienceBar={showAudienceBar} />
       <main className={compact ? styles.mainCompact : styles.main}>
         {children}
       </main>
-      {showFooter && <SiteFooter />}
+      {showFooter && (
+        <SiteFooter
+          showColumns={showFooterColumns}
+          showLivePollLegalLinks={showLivePollLegalLinks}
+        />
+      )}
     </div>
   );
 }

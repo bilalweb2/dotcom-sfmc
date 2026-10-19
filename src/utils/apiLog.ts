@@ -4,7 +4,7 @@
  *              Azure, and New Relic.
  */
 
-import logger from "@/logger";
+import logger, { maskEmail, maskPhone } from "@/logger";
 import { getAzureInsightsClient } from "@/libs/azureInsights";
 import { connectMongoose } from "@/libs/mongoose";
 import { getNewRelicAgent } from "@/libs/newRelic";
@@ -14,6 +14,9 @@ const MAX_BODY_CHARS = 8_000;
 
 const SENSITIVE_KEY =
   /password|secret|token|authorization|api[_-]?key|credential|connectionstring/i;
+const EMAIL_KEY = /email/i;
+const PHONE_KEY = /phone|mobile|telephone/i;
+const EMAIL_ADDRESS = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
 
 export interface ApiExchangeLog {
   method: string;
@@ -31,6 +34,10 @@ function truncate(value: string): string {
   return `${value.slice(0, MAX_BODY_CHARS)}…`;
 }
 
+function sanitizeString(value: string): string {
+  return value.replace(EMAIL_ADDRESS, (email) => maskEmail(email));
+}
+
 function redactValue(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(redactValue);
   if (value && typeof value === "object") {
@@ -38,14 +45,23 @@ function redactValue(value: unknown): unknown {
     for (const [key, nested] of Object.entries(
       value as Record<string, unknown>,
     )) {
-      safe[key] = SENSITIVE_KEY.test(key) ? "[REDACTED]" : redactValue(nested);
+      if (SENSITIVE_KEY.test(key)) {
+        safe[key] = "[REDACTED]";
+      } else if (EMAIL_KEY.test(key) && typeof nested === "string") {
+        safe[key] = maskEmail(nested);
+      } else if (PHONE_KEY.test(key) && typeof nested === "string") {
+        safe[key] = maskPhone(nested);
+      } else {
+        safe[key] = redactValue(nested);
+      }
     }
     return safe;
   }
+  if (typeof value === "string") return sanitizeString(value);
   return value;
 }
 
-/** Redacts secrets in a JSON or form body before it is written to logs. */
+/** Redacts secrets and personal data before a body is written to logs. */
 export function sanitizeBody(raw: string): string {
   if (!raw) return "";
 
@@ -58,34 +74,69 @@ export function sanitizeBody(raw: string): string {
   if (raw.includes("=")) {
     const params = new URLSearchParams(raw);
     for (const key of params.keys()) {
-      if (SENSITIVE_KEY.test(key)) params.set(key, "[REDACTED]");
+      if (SENSITIVE_KEY.test(key)) {
+        params.set(key, "[REDACTED]");
+      } else if (EMAIL_KEY.test(key)) {
+        params.set(key, maskEmail(params.get(key)));
+      } else if (PHONE_KEY.test(key)) {
+        params.set(key, maskPhone(params.get(key)));
+      } else {
+        params.set(key, sanitizeString(params.get(key) ?? ""));
+      }
     }
     return truncate(params.toString());
   }
 
-  return truncate(raw);
+  return truncate(sanitizeString(raw));
+}
+
+function sanitizeQuery(raw: string): string {
+  if (!raw) return "";
+  const prefix = raw.startsWith("?") ? "?" : "";
+  const params = new URLSearchParams(prefix ? raw.slice(1) : raw);
+
+  for (const key of params.keys()) {
+    if (SENSITIVE_KEY.test(key)) {
+      params.set(key, "[REDACTED]");
+    } else if (EMAIL_KEY.test(key)) {
+      params.set(key, maskEmail(params.get(key)));
+    } else if (PHONE_KEY.test(key)) {
+      params.set(key, maskPhone(params.get(key)));
+    } else {
+      params.set(key, sanitizeString(params.get(key) ?? ""));
+    }
+  }
+
+  return `${prefix}${params.toString()}`;
 }
 /**
  * Records one API call. Console logging always runs.
  * Azure and New Relic receive the same record when each is configured.
  */
-export async function logApiExchange(entry: ApiExchangeLog): Promise<void> {
+export async function logApiExchange(
+  entry: ApiExchangeLog,
+  options: { skipMongoDB?: boolean } = {},
+): Promise<void> {
+  const safeEntry = { ...entry, query: sanitizeQuery(entry.query) };
+  console.log('tet',safeEntry)
   const requestBody = sanitizeBody(String(entry.requestBody));
   const responseBody = sanitizeBody(String(entry.responseBody));
   const record = {
-    method: entry.method,
-    path: entry.path,
-    query: entry.query,
-    status: entry.status,
-    durationMs: entry.durationMs,
-    requestId: entry.requestId,
+    method: safeEntry.method,
+    path: safeEntry.path,
+    query: safeEntry.query,
+    status: safeEntry.status,
+    durationMs: safeEntry.durationMs,
+    requestId: safeEntry.requestId,
     request: requestBody,
     response: responseBody,
   };
 
   logger.info("API call", record);
-  await sendToMongoDB(entry, requestBody, responseBody);
-  await sendToAzure(entry, requestBody, responseBody);
+  if (!options.skipMongoDB) {
+    await sendToMongoDB(safeEntry, requestBody, responseBody);
+  }
+  await sendToAzure(safeEntry, requestBody, responseBody);
   await sendToNewRelic(record);
 }
 

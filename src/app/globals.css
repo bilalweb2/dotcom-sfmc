@@ -8,8 +8,8 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  --font-sans: "Object Sans", Verdana, sans-serif;
+  --foreground: #141928;
+  --font-sans: "ObjectSans-Regular", Verdana, sans-serif !important;
   --font-display: "BandwidthDisplay-Regular", Verdana, sans-serif;
 }
 
