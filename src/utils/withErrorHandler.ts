@@ -19,6 +19,15 @@ import { logApiExchange } from "@/utils/apiLog";
 
 type RouteHandler = (request: NextRequest) => Promise<NextResponse | Response>;
 
+function isMongoServerSelectionTimeout(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+
+  return (
+    error.name === "MongooseServerSelectionError" ||
+    error.name === "MongoServerSelectionError"
+  );
+}
+
 async function readBody(
   source: { text: () => Promise<string> } | undefined,
 ): Promise<string> {
@@ -37,17 +46,24 @@ export function withErrorHandler(handler: RouteHandler): RouteHandler {
       request.headers.get("x-request-id") ?? crypto.randomUUID();
     const requestBody = await readBody(request.clone());
 
-    const record = async (status: number, responseBody: string) => {
-      await logApiExchange({
-        method: request.method,
-        path: request.nextUrl.pathname,
-        query: request.nextUrl.search,
-        status,
-        durationMs: Date.now() - started,
-        requestBody,
-        responseBody,
-        requestId,
-      });
+    const record = async (
+      status: number,
+      responseBody: string,
+      options?: { skipMongoDB?: boolean },
+    ) => {
+      await logApiExchange(
+        {
+          method: request.method,
+          path: request.nextUrl.pathname,
+          query: request.nextUrl.search,
+          status,
+          durationMs: Date.now() - started,
+          requestBody,
+          responseBody,
+          requestId,
+        },
+        options,
+      );
     };
 
     try {
@@ -56,6 +72,8 @@ export function withErrorHandler(handler: RouteHandler): RouteHandler {
       await record(response.status, await readBody(response.clone()));
       return response;
     } catch (error) {
+      const databaseUnavailable = isMongoServerSelectionTimeout(error);
+      const status = databaseUnavailable ? 503 : 500;
       const message = error instanceof Error ? error.message : String(error);
       logger.error("Unhandled API error", {
         path: request.nextUrl.pathname,
@@ -65,11 +83,15 @@ export function withErrorHandler(handler: RouteHandler): RouteHandler {
       });
 
       const body = {
-        error: "Internal Server Error",
+        error: databaseUnavailable
+          ? "Database temporarily unavailable"
+          : "Internal Server Error",
         timestamp: new Date().toISOString(),
       };
-      await record(500, JSON.stringify(body));
-      const failure = NextResponse.json(body, { status: 500 });
+      await record(status, JSON.stringify(body), {
+        skipMongoDB: databaseUnavailable,
+      });
+      const failure = NextResponse.json(body, { status });
       failure.headers.set("X-Request-Id", requestId);
       return failure;
     }

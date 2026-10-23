@@ -29,17 +29,29 @@ describe("ErrorPage", () => {
       screen.getByRole("heading", { name: "Something went wrong" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/An unexpected error occurred\. Our team has been notified\./),
+      screen.getByText(
+        /An unexpected error occurred\. Our team has been notified\./,
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText("err-123")).toBeInTheDocument();
-    expect(consoleError).toHaveBeenCalledWith("[ErrorPage]", "Server failure", "err-123");
+    expect(consoleError).toHaveBeenCalledWith(
+      "[ErrorPage]",
+      "Server failure",
+      "err-123",
+    );
   });
 
   it("omits the reference when there is no digest and logs an empty reference", () => {
-    render(<ErrorPage error={new Error("Unknown failure")} reset={jest.fn()} />);
+    render(
+      <ErrorPage error={new Error("Unknown failure")} reset={jest.fn()} />,
+    );
 
     expect(screen.queryByText(/Reference:/)).not.toBeInTheDocument();
-    expect(consoleError).toHaveBeenCalledWith("[ErrorPage]", "Unknown failure", "");
+    expect(consoleError).toHaveBeenCalledWith(
+      "[ErrorPage]",
+      "Unknown failure",
+      "",
+    );
   });
 
   it("calls reset when Try again is clicked", () => {

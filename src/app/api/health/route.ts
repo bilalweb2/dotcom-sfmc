@@ -33,11 +33,14 @@
 
 import { NextResponse } from "next/server";
 import { APP_NAME, APP_VERSION } from "@/constants";
+import { connectMongoose } from "@/libs/mongoose";
 import { withErrorHandler } from "@/utils/withErrorHandler";
 
 export const dynamic = "force-dynamic";
 
 export const GET = withErrorHandler(async () => {
+  await connectMongoose();
+
   return NextResponse.json({
     status: "ok",
     app: APP_NAME,

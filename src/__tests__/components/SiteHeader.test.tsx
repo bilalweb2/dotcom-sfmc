@@ -42,9 +42,7 @@ describe("SiteHeader", () => {
     expect(
       within(audienceNavigation).getByRole("link", { name: "Residential" }),
     ).toHaveAttribute("href", "https://frontier.com/");
-    expect(
-      within(audienceNavigation).getAllByRole("link"),
-    ).toHaveLength(4);
+    expect(within(audienceNavigation).getAllByRole("link")).toHaveLength(4);
 
     const siteNavigation = screen.getByRole("navigation", {
       name: "Site Navigation",
@@ -61,7 +59,10 @@ describe("SiteHeader", () => {
     expect(
       within(siteNavigation)
         .getAllByRole("link", { name: "Deals" })
-        .find((link) => link.getAttribute("href") === "https://frontier.com/shop/deals"),
+        .find(
+          (link) =>
+            link.getAttribute("href") === "https://frontier.com/shop/deals",
+        ),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Sign In/Register", hidden: true }),
@@ -74,8 +75,16 @@ describe("SiteHeader", () => {
       name: "Frontier, a Verizon Company",
     });
     expect(logoLink.querySelectorAll("img")).toHaveLength(2);
-    expect(logoLink.querySelector('img[src="/images/svg/site-desktop-logo-verizon.svg"]')).toBeInTheDocument();
-    expect(logoLink.querySelector('img[src="/images/svg/site-mobile-logo-verizon.svg"]')).toBeInTheDocument();
+    expect(
+      logoLink.querySelector(
+        'img[src="/images/svg/site-desktop-logo-verizon.svg"]',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      logoLink.querySelector(
+        'img[src="/images/svg/site-mobile-logo-verizon.svg"]',
+      ),
+    ).toBeInTheDocument();
   });
 
   it("toggles the mobile menu and resets any open submenu", () => {
@@ -147,7 +156,10 @@ describe("SiteHeader", () => {
     fireEvent.click(
       screen
         .getAllByRole("link", { name: "Deals" })
-        .find((link) => link.getAttribute("href") === "https://frontier.com/shop/deals")!,
+        .find(
+          (link) =>
+            link.getAttribute("href") === "https://frontier.com/shop/deals",
+        )!,
     );
 
     expect(screen.getByRole("button", { name: "Open menu" })).toHaveAttribute(
@@ -159,7 +171,11 @@ describe("SiteHeader", () => {
   it("applies the scrolled state and removes its scroll listener on unmount", () => {
     const { container, unmount } = render(<SiteHeader />);
     const root = container.firstElementChild as HTMLElement;
+    const topbar = container.querySelector(
+      '[aria-label="Audience"]',
+    )!.parentElement!;
     const initialClassName = root.className;
+    expect(topbar).not.toHaveAttribute("hidden");
 
     Object.defineProperty(window, "scrollY", {
       configurable: true,
@@ -167,6 +183,7 @@ describe("SiteHeader", () => {
     });
     fireEvent.scroll(window);
     expect(root.className).not.toBe(initialClassName);
+    expect(topbar).toHaveAttribute("hidden");
 
     Object.defineProperty(window, "scrollY", {
       configurable: true,
@@ -174,6 +191,7 @@ describe("SiteHeader", () => {
     });
     fireEvent.scroll(window);
     expect(root.className).toBe(initialClassName);
+    expect(topbar).not.toHaveAttribute("hidden");
 
     unmount();
     fireEvent.scroll(window);

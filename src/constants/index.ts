@@ -32,4 +32,6 @@ export const API_ROUTES = {
   UNSUB_PREFERENCES: `${BASE_PATH}/api/Unsubscribe-Form-Processing`,
   WHWF_PROCESSING: `${BASE_PATH}/api/WHWF_Processing`,
   DECODE_EMEID: `${BASE_PATH}/api/DecodeEMEID`,
+  DISCONNECTING_PROCESSING: `${BASE_PATH}/api/disconnecting-processing`,
+  UBB_PROCESSING: `${BASE_PATH}/api/unbreakable-wifi-confirmation`,
 };

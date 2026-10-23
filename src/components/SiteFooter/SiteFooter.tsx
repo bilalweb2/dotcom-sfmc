@@ -174,78 +174,90 @@ const socialLinks = [
   },
 ];
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  showFooterColumns?: boolean;
+  showLivePollLegalLinks?: boolean;
+}
+
+export function SiteFooter({
+  showFooterColumns = true,
+  showLivePollLegalLinks = false,
+}: SiteFooterProps) {
   const [openColumn, setOpenColumn] = useState<string | null>(null);
 
   return (
     <footer className={styles.root}>
       <div className={styles.inner}>
-        <div className={styles.columns}>
-          {columns.map(({ heading, links }) => {
-            const open = openColumn === heading;
-            return (
-              <div key={heading} className={styles.column}>
-                <button
-                  type="button"
-                  className={`${styles.heading}${open ? ` ${styles.headingOpen}` : ""}`}
-                  aria-expanded={open}
-                  onClick={() =>
-                    setOpenColumn((current) =>
-                      current === heading ? null : heading,
-                    )
-                  }
-                >
-                  {heading}
-                  <svg
-                    className={styles.chevron}
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
+        {showFooterColumns && (
+          <div className={styles.columns}>
+            {columns.map(({ heading, links }) => {
+              const open = openColumn === heading;
+              return (
+                <div key={heading} className={styles.column}>
+                  <button
+                    type="button"
+                    className={`${styles.heading}${open ? ` ${styles.headingOpen}` : ""}`}
+                    aria-expanded={open}
+                    onClick={() =>
+                      setOpenColumn((current) =>
+                        current === heading ? null : heading,
+                      )
+                    }
                   >
-                    <path
-                      d="M5 7.5L10 12.5L15 7.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                    />
-                  </svg>
-                </button>
-                <ul
-                  className={`${styles.linkList}${open ? ` ${styles.linkListOpen}` : ""}`}
-                >
-                  {links.map(({ label, href }) => (
-                    <li key={label}>
-                      <a
-                        href={href}
-                        className={styles.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
+                    {heading}
+                    <svg
+                      className={styles.chevron}
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M5 7.5L10 12.5L15 7.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+                    </svg>
+                  </button>
+                  <ul
+                    className={`${styles.linkList}${open ? ` ${styles.linkListOpen}` : ""}`}
+                  >
+                    {links.map(({ label, href }) => (
+                      <li key={label}>
+                        <a
+                          href={href}
+                          className={styles.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         <p className={styles.copyright}>© {new Date().getFullYear()} Verizon</p>
 
         <div className={styles.bottom}>
-          <nav className={styles.legal} aria-label="Footer legal">
-            {legalLinks.map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                className={styles.legalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
+          {(showFooterColumns || showLivePollLegalLinks) && (
+            <nav className={styles.legal} aria-label="Footer legal">
+              {legalLinks.map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  className={styles.legalLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          )}
           <div className={styles.social}>
             {socialLinks.map(({ label, href, src }) => (
               <a

@@ -199,7 +199,7 @@
   margin: auto;
   min-height: 500px;
   padding: 80px 0;
-  background-image: url("/images/whwf-hero.jpg");
+  background-image: url("/ftr-forms/images/whwf-hero.jpg");
   background-position: center right;
   background-repeat: no-repeat;
   background-size: cover;
@@ -272,28 +272,27 @@
 }
 
 .offerInner {
-  /* Bootstrap col-md-8 inside a 1140px container, matching the live page. */
-  width: min(940px, calc(100% - 32px));
+  /* Match the live page's Bootstrap .col-md-8 content width and 15px gutters. */
+  width: calc(100% - 30px);
   margin: 0 auto;
   text-align: center;
 }
 
+@media (min-width: 768px) {
+  .offerInner {
+    width: min(975px, calc(66.666667% - 30px));
+  }
+}
+
 .offerHeading {
-  width: min(1180px, calc(100vw - 48px));
-  margin: 0 0 0 50%;
-  padding-bottom: 16px;
-  transform: translateX(-50%);
+  width: 100%;
+  padding-bottom: 46px;
+  margin: 0;
   color: #141928;
   font-family: "ObjectSans-Bold", Verdana, sans-serif;
   font-size: 42px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.19;
-}
-
-@media (min-width: 768px) {
-  .headingLine {
-    display: block;
-  }
 }
 
 /* ── Feature block ─────────────────────────────────────────────────── */
@@ -352,9 +351,10 @@
 
 .consentForm {
   width: 90%;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   text-align: left;
+  padding-top: 8px;
 }
 
 .consentLabel {
@@ -368,8 +368,8 @@
 
 .consentCheckbox {
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
+  width: 24px;
+  height: 24px;
   margin-top: 2px;
   accent-color: #ff0037;
   cursor: pointer;
@@ -390,7 +390,6 @@
   justify-content: center;
   width: fit-content;
   min-width: 226px;
-  margin: 32px 0 0;
   background-color: #ff0037;
   color: #ffffff;
   font-family: "ObjectSans-Bold", Verdana, sans-serif;
@@ -424,7 +423,9 @@
 }
 
 .legalText {
-  max-width: 1140px;
+  padding-left: 15px;  
+  padding-right: 15px;
+  max-width: 1232px;
   margin: 0 auto;
   color: #141928;
   font-family: "ObjectSans-Regular", Verdana, sans-serif;
@@ -584,6 +585,13 @@
     font-size: 20px;
     line-height: 1.4;
   }
+  .consentForm{
+    padding-top: 8px;
+    width: 100%;
+  }
+  .legalText {
+    padding: 0;
+  }
 }
 
 @media (max-width: 600px) {
@@ -607,4 +615,15 @@
   .mainNavInner {
     justify-content: space-between;
   }
+  .legalText {
+    padding: 0;
+  }
+  .consentForm{
+    padding-top: 8px;
+    width: 100%;
+  }
+  .consentLabel{
+    padding-right: 10px;
+  }
+
 }

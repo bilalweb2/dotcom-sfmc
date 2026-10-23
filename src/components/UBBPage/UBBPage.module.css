@@ -1,0 +1,691 @@
+/**
+ * @file pages/PageUBB/PageUBB.module.css
+ * @description Styles for the Whole-Home Wi-Fi upgrade landing page.
+ * Matches the Frontier brand palette: deep navy, red CTA, teal accent.
+ */
+
+/* ── Root ───────────────────────────────────────────────────────────── */
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color-scheme: light;
+  background: #ffffff;
+  color: #141928;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+     SITE HEADER
+     ══════════════════════════════════════════════════════════════════════ */
+.siteHeader {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Utility bar (top strip) ─────────────────────────────────────────── */
+.utilityBar {
+  background-color: #1a1a1a;
+  padding: 6px 0;
+}
+
+.utilityNav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  /* Mirror mainNavInner constraints so the first link sits exactly above the logo */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.utilityLink {
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 400;
+  text-decoration: none;
+  padding: 0 10px;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+
+.utilityLink:hover {
+  color: #dddddd;
+  text-decoration: underline;
+}
+
+/* Active/current segment highlight */
+.utilityLink:first-child {
+  font-weight: 600;
+  border-bottom: 2px solid #ff0037;
+  padding-bottom: 2px;
+}
+
+.utilitySep {
+  color: #555555;
+  font-size: 0.72rem;
+  user-select: none;
+}
+
+/* ── Main navigation bar ─────────────────────────────────────────────── */
+.mainNav {
+  background-color: #ff0037;
+  border-bottom: none;
+}
+
+.mainNavInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ── Logo ────────────────────────────────────────────────────────────── */
+.logoLink {
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.logoSvg {
+  width: 160px;
+  height: 42px;
+}
+
+.logoIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.logoSubtitle {
+  font-size: 0.58rem;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  align-self: flex-end;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+/* ── Primary nav ─────────────────────────────────────────────────────── */
+.primaryNav {
+  flex: 1;
+}
+
+.primaryNavList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.primaryNavItem {
+  position: relative;
+}
+
+.primaryNavLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0 16px;
+  height: 64px;
+  letter-spacing: 0.01em;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.primaryNavLink:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chevron {
+  width: 10px;
+  height: 6px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+/* ── Sign In button ──────────────────────────────────────────────────── */
+.signInButton {
+  flex-shrink: 0;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 4px;
+  /* border: 2px solid #ffffff; */
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  margin-left: auto;
+}
+
+.signInButton:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Hero (matches cloud.e.frontier.com/WHWF012025) ─────────────────── */
+.hero {
+  position: relative;
+  width: 100%;
+  background-color: #141928;
+}
+
+.heroInner {
+  max-width: 1440px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+  padding: 80px 0;
+  background-image: url("/ftr-forms/images/hero-wifi.png");
+  background-position: center right;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: top 30px right 60px;
+  min-height: 500px;
+}
+
+.heroInner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgb(20, 25, 40) 0%,
+    rgb(20, 25, 40) 36%,
+    rgba(20, 25, 40, 0) 62%
+  );
+}
+
+.heroContainer {
+  position: relative;
+  max-width: 1232px;
+  margin: auto;
+  padding: 0;
+}
+
+.titleWrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 670px;
+  margin-left: 32px;
+  padding-left: 16px;
+}
+
+.heroHeading {
+  margin: 16px 0;
+  color: #ffffff;
+  font-family: "BandwidthDisplay-Regular", Verdana, sans-serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 1.125;
+  text-transform: uppercase;
+}
+
+.heroLine,
+.heroLineAccent {
+  display: block;
+  position: relative;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.heroLineAccent {
+  color: #96fff5;
+}
+
+.heroImg {
+  display: none;
+  position: relative;
+  margin-top: -10%;
+}
+
+.heroPhoto {
+  display: block;
+  height: auto;
+}
+
+/* ── Offer section ─────────────────────────────────────────────────── */
+.offer {
+  background: #ffffff;
+  padding: 80px 0;
+}
+
+.offerInner {
+  width: 100%;
+  padding: 0 15px;
+  text-align: center;
+}
+
+.offerContent {
+  font-family: "ObjectSans-Bold";
+  color: #141928;
+  font-size: 42px;
+  line-height: 50px;
+  margin-bottom: 0px;
+  padding-bottom: 40px;
+  text-transform: none;
+  text-align: center;
+}
+
+.offerHeading {
+  width: 100%;
+  margin: 0 0 0 50%;
+  transform: translateX(-50%);
+  color: #141928;
+  font-family: "ObjectSans-Bold";
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1.19;
+}
+.offerSub {
+  font-size: 0.5em;
+}
+
+.offerSpacing {
+  display: block;
+  font-family: "ObjectSans-Regular";
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 20px;
+  color: #ff0037;
+}
+
+.questionBlock {
+  padding-top: 0px;
+  padding-bottom: 12px;
+  text-align: center;
+  color: #141928;
+  font-size: 16px;
+  line-height: 32px;
+  font-family: ObjectSans-Regular;
+  font-weight: 300;
+}
+.chatLink {
+  padding-left: 3px;
+  color: #141928;
+  text-decoration: underline;
+}
+@media (min-width: 768px) {
+  .headingLine {
+    display: block;
+  }
+}
+
+/* ── Feature block ─────────────────────────────────────────────────── */
+.featureBlock {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  color: #141928;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 32px;
+  text-align: center;
+}
+
+.featureTitle {
+  display: block;
+  margin: 0 0 8px;
+  padding-top: 20px;
+  color: #141928;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.featureItem {
+  position: relative;
+  margin: 0 0 8px;
+  color: #141928;
+}
+
+.featureOffer {
+  font-family: ObjectSans-Regular;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 26px;
+  color: #ff0037;
+  padding-bottom: 30px;
+  display: block;
+}
+.featureItem span {
+  display: block;
+  padding-left: 40px;
+  color: #141928;
+}
+
+.checkIcon {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 20px;
+  height: auto;
+}
+.footerPad {
+  padding-bottom: 30px;
+}
+
+/* ── Consent ────────────────────────────────────────────────────────── */
+
+.consentForm {
+  max-width: 90%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.consentLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+.consentCheckbox {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  accent-color: #ff0037;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.consentText {
+  width: calc(100% - 40px) !important;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  color: #141928;
+  line-height: 1.3;
+}
+
+/* ── CTA ─────────────────────────────────────────────────────────────── */
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 226px;
+  background-color: #ff0037;
+  color: #ffffff;
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.72px;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 5em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.ctaButton:hover:not(:disabled),
+.ctaButton:focus-visible:not(:disabled) {
+  background-color: #000000;
+}
+
+.ctaButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Legal footer ────────────────────────────────────────────────────── */
+.legalFooter {
+  background: #f3f4f4;
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.legalText {
+  padding-left: 15px;
+  padding-right: 15px;
+  max-width: 1140px;
+  margin: 0 auto;
+  color: #141928;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.legalText a {
+  color: #141928;
+  text-decoration: underline;
+}
+
+/* ── Form fields ─────────────────────────────────────────────────────── */
+.formRow {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 0;
+}
+
+.formRow .formField {
+  flex: 1;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.fieldLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #222222;
+}
+
+.fieldInput {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.fieldInput:focus {
+  border-color: #ff0037;
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.12);
+}
+
+/* ── Inline field / consent validation error ──────────────────────── */
+.consentCheckboxError {
+  outline: 2px solid #ff0037;
+  outline-offset: 2px;
+}
+
+.fieldError {
+  font-size: 0.8rem;
+  color: #ff0037;
+  margin: 6px 0 10px;
+}
+
+/* ── Error message ─────────────────────────────────────────────────── */
+.errorMessage {
+  font-size: 0.82rem;
+  color: #ff0037;
+  background-color: #fff5f5;
+  border: 1px solid #f5c6c6;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.mainForm {
+  max-width: 800px;
+  margin: 0 auto;
+}
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .mainNavInner {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .primaryNavLink {
+    padding: 0 10px;
+    font-size: 0.8rem;
+  }
+
+  .logoSvg {
+    width: 120px;
+    height: 32px;
+  }
+
+  .logoSubtitle {
+    display: none;
+  }
+
+  .utilityNav {
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .utilityLink {
+    padding: 0 6px;
+    font-size: 0.65rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .offerInner {
+    /* Bootstrap col-md-8 inside a 1140px container, matching the live page. */
+    width: min(68%, calc(100% - 32px));
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .offerInner {
+    /* Bootstrap col-md-8 inside a 1140px container, matching the live page. */
+    width: min(66%, calc(100% - 32px));
+    margin: 0 auto;
+  }
+}
+@media (min-width: 1200px) {
+  .legalText {
+    max-width: 1232px;
+  }
+}
+@media (max-width: 1024px) {
+  .heroImg {
+    display: block;
+    max-width: 100%;
+    padding-left: 60px;
+    margin-top: 0;
+  }
+  .heroPhoto {
+    margin: -20px auto -10px;
+  }
+  .heroInner {
+    min-height: auto;
+    padding: 40px 16px 40px 0;
+    background-image: none;
+  }
+
+  .heroInner::before {
+    display: none;
+  }
+
+  .titleWrapper {
+    max-width: 100%;
+    margin-left: 16px;
+  }
+}
+
+@media (max-width: 992px) {
+  .offer {
+    padding: 64px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .heroHeading {
+    font-size: 36px;
+    line-height: 1.22;
+  }
+
+  .heroLine,
+  .heroLineAccent {
+    margin-bottom: 8px;
+  }
+
+  .offerHeading {
+    font-size: 24px;
+    line-height: 1.333;
+  }
+
+  .featureTitle {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 600px) {
+  .formRow {
+    flex-direction: column;
+    gap: 0;
+  }
+  .legalText {
+    padding: 0;
+  }
+  .heroHeading {
+    font-size: clamp(6px, 9vw, 36px);
+  }
+
+  .ctaButton {
+    width: 100%;
+  }
+
+  .primaryNav {
+    display: none;
+  }
+
+  .mainNavInner {
+    justify-content: space-between;
+  }
+}

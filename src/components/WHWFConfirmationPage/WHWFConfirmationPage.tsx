@@ -7,7 +7,11 @@
 import React from "react";
 import styles from "./WHWFConfirmationPage.module.css";
 
-export function WHWFConfirmationPage() {
+type WHWFConfirmationPageProps = {
+  message: string;
+};
+
+export function WHWFConfirmationPage({ message }: WHWFConfirmationPageProps) {
   return (
     <div className={styles.root}>
       <section
@@ -23,9 +27,7 @@ export function WHWFConfirmationPage() {
             your bill. Your self-installation kit should be delivered within 5-7
             business days.
           </p>
-          <p className={styles.confirmationTagline}>
-            Enjoy Wi-Fi coverage where you need it.
-          </p>
+          <p className={styles.confirmationTagline}>{message}</p>
         </div>
       </section>
     </div>

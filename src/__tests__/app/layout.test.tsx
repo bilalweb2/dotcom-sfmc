@@ -46,6 +46,7 @@ describe("RootDocumentLayout", () => {
 
     expect(connection).toHaveBeenCalledTimes(1);
     expect(markup).toContain('<html lang="en">');
+    expect(markup).toContain("<body>");
     expect(markup).toContain("<p>Page content</p>");
     expect(markup).toContain('url("/fonts/ObjectSans-Regular.woff2")');
     expect(markup).toContain('url("/fonts/bandwidth-display.woff")');
@@ -59,8 +60,29 @@ describe("RootDocumentLayout", () => {
     });
     const markup = renderToStaticMarkup(layout);
 
-    expect(markup).toContain('url("/ftr-forms/fonts/ObjectSans-Regular.woff2")');
-    expect(markup).toContain('url("/ftr-forms/fonts/object-sans-regular.woff")');
+    expect(markup).toContain(
+      'url("/ftr-forms/fonts/ObjectSans-Regular.woff2")',
+    );
+    expect(markup).toContain(
+      'url("/ftr-forms/fonts/object-sans-regular.woff")',
+    );
     expect(markup).toContain("<p>Form page</p>");
+  });
+
+  it("declares static font files with their actual weights", async () => {
+    const layout = await RootDocumentLayout({
+      children: <p>Weighted text</p>,
+      params: Promise.resolve({}),
+    });
+    const markup = renderToStaticMarkup(layout);
+
+    expect(markup).toContain('font-family: "ObjectSans-Regular";');
+    expect(markup).toContain('font-family: "ObjectSans-Medium";');
+    expect(markup).toContain('font-family: "ObjectSans-Bold";');
+    expect(markup).toContain('font-family: "Object Sans";');
+    expect(markup).toContain("font-weight: 400;");
+    expect(markup).toContain("font-weight: 500;");
+    expect(markup).toContain("font-weight: 700;");
+    expect(markup).not.toContain("font-weight: 100 900;");
   });
 });

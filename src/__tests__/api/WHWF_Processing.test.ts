@@ -365,6 +365,18 @@ describe("POST /ftr-forms/api/WHWF_Processing", () => {
       expect(response.status).toBe(500);
     });
 
+    it("returns 503 when MongoDB server selection times out", async () => {
+      const timeoutError = new Error("Server selection timed out");
+      timeoutError.name = "MongooseServerSelectionError";
+      (connectMongoose as jest.Mock).mockRejectedValueOnce(timeoutError);
+
+      const response = await POST(makeJsonRequest(VALID_PAYLOAD));
+      const body = await response.json();
+
+      expect(response.status).toBe(503);
+      expect(body.error).toBe("Database temporarily unavailable");
+    });
+
     it("returns 500 when request body is not valid JSON", async () => {
       const badRequest = new NextRequest(BASE_URL, {
         method: "POST",

@@ -3,7 +3,8 @@
  * @description Header from https://cloud.e.frontier.com/Unsubscribe-form.
  * Desktop: dark audience bar + red navigation bar with dropdowns.
  * Mobile: red bar (menu, logo, Sign In) and a collapsible navigation panel.
- * The whole header stays pinned to the top while the page scrolls.
+ * The navigation stays pinned to the top while the page scrolls; the audience
+ * bar is visible only at the top of the page.
  */
 
 "use client";
@@ -139,7 +140,11 @@ function Caret() {
 
 const basePath = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  showAudienceBar?: boolean;
+}
+
+export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -163,25 +168,27 @@ export function SiteHeader() {
 
   return (
     <div className={`${styles.root}${scrolled ? ` ${styles.scrolled}` : ""}`}>
-      <div className={styles.topbar}>
-        <nav className={styles.topbarInner} aria-label="Audience">
-          {audienceLinks.map(({ label, href, active }) => (
-            <a
-              key={label}
-              href={href}
-              className={
-                active
-                  ? `${styles.topLink} ${styles.topLinkActive}`
-                  : styles.topLink
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
-      </div>
+      {showAudienceBar && (
+        <div className={styles.topbar} hidden={scrolled}>
+          <nav className={styles.topbarInner} aria-label="Audience">
+            {audienceLinks.map(({ label, href, active }) => (
+              <a
+                key={label}
+                href={href}
+                className={
+                  active
+                    ? `${styles.topLink} ${styles.topLinkActive}`
+                    : styles.topLink
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
 
       <header className={styles.header}>
         <div className={styles.bar}>
@@ -313,23 +320,25 @@ export function SiteHeader() {
                 Sign In/Register
               </a>
 
-              <ul className={styles.audience}>
-                {audienceLinks.map(({ label, href, active }) => (
-                  <li
-                    key={label}
-                    className={active ? styles.audienceActive : undefined}
-                  >
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={closeMobile}
+              {showAudienceBar && (
+                <ul className={styles.audience}>
+                  {audienceLinks.map(({ label, href, active }) => (
+                    <li
+                      key={label}
+                      className={active ? styles.audienceActive : undefined}
                     >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={closeMobile}
+                      >
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>

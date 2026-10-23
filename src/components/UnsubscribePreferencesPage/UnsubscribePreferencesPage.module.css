@@ -112,6 +112,9 @@
 }
 
 .checkboxRow {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -186,6 +189,7 @@
   font-size: 14px;
   line-height: 18px;
   margin: 6px 0 0 4px;
+  padding-bottom: 20px;
 }
 
 .errorMessage {

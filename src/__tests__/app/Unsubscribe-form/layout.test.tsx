@@ -40,7 +40,9 @@ describe("UnsubscribeFormLayout", () => {
 
   it("renders the compact layout when children are empty", () => {
     render(
-      <UnsubscribeFormLayout params={Promise.resolve({})}>{null}</UnsubscribeFormLayout>,
+      <UnsubscribeFormLayout params={Promise.resolve({})}>
+        {null}
+      </UnsubscribeFormLayout>,
     );
 
     expect(screen.getByRole("main")).toBeEmptyDOMElement();

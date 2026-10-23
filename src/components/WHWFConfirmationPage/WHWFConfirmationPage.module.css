@@ -179,14 +179,15 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 50px 15px 82px;
+  padding: 50px 0 82px;
   background-color: #141928;
   text-align: center;
 }
 
 .confirmationContent {
-  max-width: 1170px;
+  max-width: 1232px;
   width: 100%;
+  padding: 0 15px;
 }
 
 .confirmationHeading {
@@ -194,7 +195,7 @@
   font-size: 28px;
   font-weight: 400;
   color: #ffffff;
-  margin: 0 0 29px;
+  margin: 0 0 25px;
   line-height: 1.5;
 }
 
@@ -209,7 +210,7 @@
 }
 
 .confirmationBody {
-  margin-bottom: 29px;
+  margin-bottom: 23px;
 }
 
 /* ══════════════════════════════════════════════════════════════════════

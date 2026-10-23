@@ -145,10 +145,8 @@ export function WHWFPage({ pageName }: WHWFPageProps) {
       <section className={styles.offer} aria-label="Offer details">
         <div className={styles.offerInner}>
           <h2 className={styles.offerHeading}>
-            Extend the Wi-Fi coverage in your home- Pay{" "}
-            <span className={styles.headingLine}>
-              $0 for the first month, then only $10/mo. after*
-            </span>
+            Extend the Wi-Fi coverage in your home- Pay $0 for the first month,
+            then only $10/mo. after*
           </h2>
 
           <div className={styles.featureBlock}>
@@ -214,6 +212,9 @@ export function WHWFPage({ pageName }: WHWFPageProps) {
                   {errors.root.message}
                 </p>
               )}
+              <br />
+              <br />
+
 
               <button
                 type="submit"
@@ -248,6 +249,7 @@ export function WHWFPage({ pageName }: WHWFPageProps) {
           <br />
           <br />© 2026 Verizon
         </p>
+        <br />
       </footer>
     </div>
   );

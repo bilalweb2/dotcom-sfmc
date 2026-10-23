@@ -21,6 +21,7 @@ import {
   unsubscribePreferencesDefaultValues,
   type UnsubscribePreferencesFormValues,
 } from "@/utils/unsubscribePreferencesValidation";
+import { fetchDecodedEmail, postForm } from "@/utils/fetch";
 import { API_ROUTES } from "@/constants";
 import styles from "./UnsubscribePreferencesPage.module.css";
 
@@ -89,15 +90,8 @@ export function UnsubscribePreferencesPage() {
   useEffect(() => {
     if (!EMEID) return;
 
-    const params = new URLSearchParams({ EMEID, ...(CUHID ? { CUHID } : {}) });
-
-    fetch(`${API_ROUTES.DECODE_EMEID}?${params.toString()}`)
-      .then(async (res) => {
-        if (!res.ok) return;
-        const json = (await res.json()) as {
-          data?: { decoded?: string };
-        };
-        const decoded = json?.data?.decoded;
+    fetchDecodedEmail(EMEID, CUHID)
+      .then((decoded) => {
         if (decoded) {
           setValue("email", decoded, { shouldValidate: true });
           setEmailReadOnly(true);
@@ -178,17 +172,7 @@ export function UnsubscribePreferencesPage() {
     });
 
     try {
-      const res = await fetch(API_ROUTES.UNSUB_PREFERENCES, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
-      });
-
-      if (!res.ok) {
-        const errorData = (await res.json()) as { error?: string };
-        throw new Error(errorData.error ?? "Unsubscribe request failed");
-      }
-
+      await postForm(API_ROUTES.UNSUB_PREFERENCES, body);
       router.push("/Unsubscribe-Confirmation");
     } catch (error) {
       setError("root", {

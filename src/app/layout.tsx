@@ -21,7 +21,7 @@ function buildFontFaceStyles(basePath: string): string {
       font-family: "ObjectSans-Regular";
       src: url("${basePath}/fonts/ObjectSans-Regular.woff2") format("woff2"),
            url("${basePath}/fonts/object-sans-regular.woff") format("woff");
-      font-weight: 100 900;
+      font-weight: 400;
       font-style: normal;
       font-display: swap;
     }
@@ -29,7 +29,7 @@ function buildFontFaceStyles(basePath: string): string {
       font-family: "ObjectSans-Medium";
       src: url("${basePath}/fonts/object-sans-medium.woff2") format("woff2"),
            url("${basePath}/fonts/object-sans-medium.woff") format("woff");
-      font-weight: 100 900;
+      font-weight: 500;
       font-style: normal;
       font-display: swap;
     }
@@ -37,7 +37,7 @@ function buildFontFaceStyles(basePath: string): string {
       font-family: "ObjectSans-Bold";
       src: url("${basePath}/fonts/ObjectSans-Bold.woff2") format("woff2"),
            url("${basePath}/fonts/object-sans-bold.woff") format("woff");
-      font-weight: 100 900;
+      font-weight: 700;
       font-style: normal;
       font-display: swap;
     }
@@ -45,7 +45,7 @@ function buildFontFaceStyles(basePath: string): string {
       font-family: "BandwidthDisplay-Regular";
       src: url("${basePath}/fonts/ObjectSans-Bandwidth.woff2") format("woff2"),
            url("${basePath}/fonts/bandwidth-display.woff") format("woff");
-      font-weight: 100 900;
+      font-weight: 400;
       font-style: normal;
       font-display: swap;
     }
@@ -69,7 +69,7 @@ function buildFontFaceStyles(basePath: string): string {
       font-family: "Object Sans";
       src: url("${basePath}/fonts/ObjectSans-Bold.woff2") format("woff2"),
            url("${basePath}/fonts/object-sans-bold.woff") format("woff");
-      font-weight: 600 900;
+      font-weight: 700;
       font-style: normal;
       font-display: swap;
     }
@@ -86,7 +86,7 @@ export default async function Layout({ children }: LayoutProps<"/">) {
   const basePath = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       {/* Inject @font-face with basePath-prefixed URLs so fonts resolve correctly */}
       <head>
         <style
@@ -95,7 +95,7 @@ export default async function Layout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: buildFontFaceStyles(basePath) }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <RootLayout>{children}</RootLayout>
       </body>
     </html>

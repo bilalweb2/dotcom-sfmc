@@ -42,7 +42,9 @@ describe("SiteFooter", () => {
       ).toHaveLength(linkCount);
     }
 
-    expect(screen.getByRole("link", { name: "Fiber Internet" })).toHaveAttribute(
+    expect(
+      screen.getByRole("link", { name: "Fiber Internet" }),
+    ).toHaveAttribute(
       "href",
       "https://frontier.com/shop/internet/fiber-internet",
     );
@@ -83,18 +85,24 @@ describe("SiteFooter", () => {
       expect(socialLink).toHaveAttribute("rel", "noopener noreferrer");
       expect(socialLink.querySelector("img")).toHaveAttribute(
         "src",
-        expect.stringContaining("https://static.example.test/images/svg/social/"),
+        expect.stringContaining(
+          "https://static.example.test/images/svg/social/",
+        ),
       );
     }
 
-    expect(screen.getByText(`© ${new Date().getFullYear()} Verizon`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`© ${new Date().getFullYear()} Verizon`),
+    ).toBeInTheDocument();
   });
 
   it("uses a relative social image path when no public app URL is configured", () => {
     // delete process.env.NEXT_PUBLIC_APP_URL;
     render(<SiteFooter />);
 
-    expect(screen.getByRole("link", { name: "X" }).querySelector("img")).toHaveAttribute(
+    expect(
+      screen.getByRole("link", { name: "X" }).querySelector("img"),
+    ).toHaveAttribute(
       "src",
       expect.stringContaining("/images/svg/social/x.svg"),
     );

@@ -1,4 +1,4 @@
-/* Sticky shell: audience bar + red nav stay at the top while scrolling. */
+/* Sticky shell: the red nav stays at the top while scrolling. */
 .root {
   position: sticky;
   top: 0;
@@ -80,7 +80,7 @@
 
 .logoDesktop {
   display: block;
-  width: 208px;
+  width: 177px;
   height: auto;
 }
 
@@ -124,7 +124,7 @@
 .signInDesktop {
   display: inline-flex;
   align-items: center;
-  padding: 21px 8px 22px;
+  padding: 18px 8px 18px;
   border: 0;
   background: transparent;
   color: #ffffff;
@@ -148,9 +148,9 @@
 }
 
 .caret {
-  width: 18px;
-  height: 18px;
-  margin-left: 8px;
+  width: 24px;
+  height: 24px;
+  margin-left: 6px;
   flex-shrink: 0;
   transition: transform 0.3s ease;
 }
@@ -216,6 +216,12 @@
 
 /* ── Mobile / tablet ────────────────────────────────────────────── */
 @media (max-width: 1023px) {
+  .logoLink {
+    width: auto;
+    height: auto;
+    max-width: 208px;
+  }
+
   .topbar {
     display: none;
   }
@@ -228,7 +234,7 @@
     position: relative;
     justify-content: space-between;
     max-width: none;
-    min-height: 46px;
+    min-height: 38px;
   }
 
   .hamburger {

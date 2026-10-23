@@ -1,0 +1,185 @@
+.confirmationBanner {
+  background-color: #141928;
+  padding: 4rem 2rem;
+}
+
+.confirmationContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.confirmationHeading {
+  margin: 0 0 29px;
+  color: #96fff5;
+  font-family: "BandwidthDisplay-Regular", Verdana, sans-serif;
+  font-size: 2.625rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.06rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rewardsFeature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.rewardsVisual,
+.rewardsCopy {
+  flex: 0 1 50%;
+  width: 100%;
+  max-width: 600px;
+}
+
+.rewardsVisual {
+  position: relative;
+  display: flex;
+  min-height: 220px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1rem 2rem;
+  border: 2px solid gray;
+  border-radius: 1rem;
+}
+
+.rewardsVisualHeading {
+  position: relative;
+  z-index: 0;
+  margin: 0;
+  color: #96fff5;
+  font-family: "BandwidthDisplay-Regular", Verdana, sans-serif;
+  font-size: 2.625rem;
+  font-weight: 400;
+  line-height: 1.125;
+  letter-spacing: 0.06rem;
+  text-transform: uppercase;
+}
+
+.rewardsVisualHeading::before {
+  position: absolute;
+  z-index: -1;
+  top: 0.125rem;
+  left: calc(-200% - 16px);
+  display: block;
+  width: 200%;
+  height: 88%;
+  background: #ed0037;
+  content: "";
+}
+
+.rewardsVisualHeading span {
+  color: #ffffff;
+}
+
+.rewardsCopy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rewardsTextContain {
+  max-width: 380px;
+}
+
+.rewardsParagraph {
+  margin: 0 0 1rem;
+  color: #ffffff;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.444;
+}
+
+.stripes {
+  background-color: #141928;
+}
+
+.stripe {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  background-color: #ff0037;
+}
+
+.ctaSection {
+  padding: 3rem 1rem 4rem;
+  text-align: center;
+}
+
+.ctaContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ctaHeading {
+  padding-bottom: 1.25rem;
+}
+
+.ctaButton {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  min-width: 185px;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 1rem;
+  border: 1px solid #ed0037;
+  border-radius: 4rem;
+  background-color: #ed0037;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: "ObjectSans-Bold", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1rem;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: 0.2s all;
+}
+
+@media (max-width: 768px) {
+  .confirmationBanner {
+    padding: 2rem;
+  }
+
+  .rewardsFeature {
+    display: block;
+  }
+
+  .rewardsVisual {
+    min-height: 160px;
+    margin-bottom: 2rem;
+  }
+
+  .rewardsTextContain {
+    max-width: 100%;
+  }
+
+  .rewardsParagraph {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 600px) {
+  .confirmationHeading {
+    font-size: 1.875rem;
+    line-height: 2.375rem;
+  }
+
+  .rewardsVisualHeading {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .confirmationBanner {
+    padding: 2rem 1rem;
+  }
+}

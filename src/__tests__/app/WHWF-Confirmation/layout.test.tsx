@@ -40,7 +40,9 @@ describe("WHWFConfirmationLayout", () => {
 
   it("renders the compact layout when children are empty", () => {
     render(
-      <WHWFConfirmationLayout params={Promise.resolve({})}>{null}</WHWFConfirmationLayout>,
+      <WHWFConfirmationLayout params={Promise.resolve({})}>
+        {null}
+      </WHWFConfirmationLayout>,
     );
 
     expect(screen.getByRole("main")).toBeEmptyDOMElement();

@@ -39,6 +39,8 @@ const PUBLIC_PATHS = [
   `${API_PREFIX}/UnsubFormProcessing`,
   `${API_PREFIX}/Unsubscribe-Form-Processing`,
   `${API_PREFIX}/DecodeEMEID`,
+  `${API_PREFIX}/disconnecting-processing`,
+  `${API_PREFIX}/unbreakable-wifi-confirmation`,
 ];
 
 function isPublicPath(pathname: string): boolean {

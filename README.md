@@ -129,7 +129,9 @@ All page routes use the `PageLayout` shell (Frontier header + optional footer).
 
 ### `GET /api/health`
 
-Health check. Returns app status, version, uptime, and environment.
+Health check. Returns app status, version, uptime, and verifies that MongoDB is
+reachable. MongoDB server selection times out after 10 seconds; an unavailable
+database returns `503`.
 
 **Response `200`**
 
@@ -324,6 +326,7 @@ Create a `.env.local` file in the project root:
 ```env
 # MongoDB connection string (required)
 MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/ftr-forms
+# MongoDB server selection timeout: 10 seconds
 
 # Public base URL (used for absolute URL construction)
 NEXT_PUBLIC_APP_URL=http://localhost:3000
