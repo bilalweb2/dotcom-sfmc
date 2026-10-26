@@ -9,8 +9,24 @@ import { render, screen } from "@testing-library/react";
 import UBBWifiPage, { metadata } from "@/app/UBB-BAU/page";
 
 jest.mock("@/components/UBBPage", () => ({
-  UBBPage: ({ pageName }: { pageName: string }) => (
-    <div data-testid="ubb-page" data-page-name={pageName} />
+  UBBPage: ({
+    pageName,
+    Offer,
+    showPrice,
+    offerPrice,
+  }: {
+    pageName: string;
+    Offer: string;
+    showPrice?: boolean;
+    offerPrice?: boolean;
+  }) => (
+    <div
+      data-testid="ubb-page"
+      data-page-name={pageName}
+      data-offer={Offer}
+      data-show-price={String(showPrice)}
+      data-offer-price={String(offerPrice)}
+    />
   ),
 }));
 
@@ -23,12 +39,13 @@ describe("UBBBauPage", () => {
     });
   });
 
-  it("renders the UBB page with the connected living page name", () => {
+  it("renders UBBPage with connected living page name and offer", () => {
     render(<UBBWifiPage />);
 
-    expect(screen.getByTestId("ubb-page")).toHaveAttribute(
-      "data-page-name",
-      "UBB-Connected Living",
-    );
+    const page = screen.getByTestId("ubb-page");
+    expect(page).toHaveAttribute("data-page-name", "UBB-Connected Living");
+    expect(page).toHaveAttribute("data-offer", "Unbreakable $25/mo");
+    expect(page).toHaveAttribute("data-show-price", "true");
+    expect(page).toHaveAttribute("data-offer-price", "false");
   });
 });

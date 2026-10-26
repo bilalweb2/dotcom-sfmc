@@ -12,7 +12,7 @@ jest.mock("@/components/HomePage", () => ({
 
 describe("Home page", () => {
   it("exports the expected metadata", () => {
-    expect(metadata).toEqual({ title: "Home" });
+    expect(metadata).toEqual({ title: "Frontier" });
   });
 
   it("renders the HomePage component", () => {

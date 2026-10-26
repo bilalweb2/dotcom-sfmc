@@ -4,8 +4,8 @@ import { RootLayout } from "@/layouts/RootLayout/RootLayout";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "SFMC", template: "%s | SFMC" },
-  description: "Salesforce Marketing Cloud",
+  title: "Frontier",
+  description: "Frontier offers and customer service.",
 };
 
 /**

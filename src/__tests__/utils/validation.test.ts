@@ -5,8 +5,10 @@
 
 import {
   getMissingFields,
+  isWithinSizeLimit,
   isNonEmptyString,
   sanitiseString,
+  toSafeInt,
 } from "@/utils/validation";
 
 describe("getMissingFields", () => {
@@ -48,5 +50,27 @@ describe("sanitiseString", () => {
 
   it("returns empty string for non-string input", () => {
     expect(sanitiseString(42)).toBe("");
+  });
+});
+
+describe("toSafeInt", () => {
+  it("returns the fallback when the value cannot be parsed", () => {
+    expect(toSafeInt("not a number")).toBe(0);
+    expect(toSafeInt(null, -1)).toBe(-1);
+  });
+});
+
+describe("isWithinSizeLimit", () => {
+  const requestWithContentLength = (value: string | null) => ({
+    headers: { get: () => value },
+  });
+
+  it("allows requests with no content length or a body within the limit", () => {
+    expect(isWithinSizeLimit(requestWithContentLength(null), 100)).toBe(true);
+    expect(isWithinSizeLimit(requestWithContentLength("100"), 100)).toBe(true);
+  });
+
+  it("rejects requests whose content length exceeds the limit", () => {
+    expect(isWithinSizeLimit(requestWithContentLength("101"), 100)).toBe(false);
   });
 });

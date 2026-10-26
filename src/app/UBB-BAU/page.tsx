@@ -12,5 +12,12 @@ export const metadata: Metadata = {
  * URL: /UBB-BAU
  */
 export default function UBBWifiPage() {
-  return <UBBPage pageName="UBB-Connected Living" />;
+  return (
+    <UBBPage
+      pageName="UBB-Connected Living"
+      Offer="Unbreakable $25/mo"
+      showPrice={true}
+      offerPrice={false}
+    />
+  );
 }

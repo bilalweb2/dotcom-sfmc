@@ -31,8 +31,8 @@ describe("RootDocumentLayout", () => {
 
   it("exports the expected document metadata", () => {
     expect(metadata).toEqual({
-      title: { default: "SFMC", template: "%s | SFMC" },
-      description: "Salesforce Marketing Cloud",
+      title: "Frontier",
+      description: "Frontier offers and customer service.",
     });
   });
 
