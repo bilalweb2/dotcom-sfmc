@@ -9,12 +9,12 @@
 }
 
 .confirmationHeading {
-  margin: 0 0 29px;
+  margin: 0 0 2rem;
   color: #96fff5;
   font-family: "BandwidthDisplay-Regular", Verdana, sans-serif;
   font-size: 2.625rem;
-  font-weight: 400;
-  line-height: 1;
+  font-weight: bold;
+  line-height: 1.125;
   letter-spacing: 0.06rem;
   text-align: center;
   text-transform: uppercase;
@@ -55,7 +55,7 @@
   color: #96fff5;
   font-family: "BandwidthDisplay-Regular", Verdana, sans-serif;
   font-size: 2.625rem;
-  font-weight: 400;
+  font-weight: bold;
   line-height: 1.125;
   letter-spacing: 0.06rem;
   text-transform: uppercase;

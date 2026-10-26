@@ -301,6 +301,7 @@
 }
 .offerSub {
   font-size: 0.5em;
+  vertical-align: 11px;
 }
 
 .offerSpacing {
@@ -468,7 +469,7 @@
 /* ── Legal footer ────────────────────────────────────────────────────── */
 .legalFooter {
   background: #f3f4f4;
-  padding: 40px 15px;
+  padding: 40px 0px 35px 0px;
   text-align: center;
 }
 

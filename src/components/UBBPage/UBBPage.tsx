@@ -37,16 +37,24 @@ const STATIC_PAYLOAD = {
   GBLUID: "",
   BTN: "",
   PageName: "",
-  Offer: "Unbreakable $25/mo",
+  Offer: "",
   ConfirmationCheckBox: false,
 };
 
 interface UBBPageProps {
   /** The page name to be sent in the form submission payload */
   pageName: string;
+  Offer: string;
+  showPrice?: boolean;
+  offerPrice?: boolean;
 }
 
-export function UBBPage({ pageName }: UBBPageProps) {
+export function UBBPage({
+  pageName,
+  Offer,
+  showPrice,
+  offerPrice,
+}: UBBPageProps) {
   const router = useRouter();
 
   // Capture Adobe Campaign click-tracking parameters from the URL
@@ -70,7 +78,8 @@ export function UBBPage({ pageName }: UBBPageProps) {
 
   useEffect(() => {
     STATIC_PAYLOAD.PageName = pageName;
-  }, [pageName]);
+    STATIC_PAYLOAD.Offer = Offer;
+  }, [pageName, Offer]);
 
   const consented = useWatch({ control, name: "consented" });
 
@@ -147,57 +156,77 @@ export function UBBPage({ pageName }: UBBPageProps) {
       <section className={styles.offer} aria-label="Offer details">
         <div className={styles.offerInner}>
           <div className={styles.offerContent}>
-          <h3 className={styles.offerHeading}>
-            Unbreakable<sup className={styles.offerSub}>™</sup> Wi-Fi
-            automatically turns on to keep you connected during network outages.
-            Only $25/mo.*
-            <span className={styles.offerSpacing}>
-              <br />
-              <br />
-            </span>
-          </h3>
-          <div>
-          <div className={styles.featureBlock}>
-            <ul className={styles.featureList}>
-              {FEATURES.map((feature) => (
-                <li key={feature} className={styles.featureItem}>
-                 <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 28 28"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{ position: "absolute", left: 4, top: 4, height: "auto" }}
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M24.2106 7L22.4606 5.25L10.7939 16.9166L6.41895 12.5416L4.66895 14.2916L9.04391 18.6666L10.7939 20.4166L12.5439 18.6666L24.2106 7Z"
-                      fill="#FF0037"
-                    />
-                  </svg>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <h3 className={styles.offerHeading}>
+              Unbreakable<sup className={styles.offerSub}>™</sup> Wi-Fi
+              automatically turns on to keep you connected during network
+              outages. {showPrice ? <><span>Only $25/mo.*</span>
+              <span className={styles.offerSpacing}>
+                <br />
+                <br />
+              </span></> : <><br /> <br/></>}
 
-          <div className={styles.questionBlock}>
-            For questions,&nbsp;
-            <a
-              className={styles.chatLink}
-              href="https://frontier.com/contact-us"
-              target="_blank"
-            >
-              chat with us live
-            </a>
-          </div>
-          </div>
+            </h3>
+            <div>
+              {offerPrice && (
+                <span className={styles.featureOffer}>
+                  Try it today and pay $0 for the first month, then $25/mo.
+                  after*
+                  <span>
+                    <br /> <br />
+                  </span>
+                </span>
+              )}
+
+              <div className={styles.featureBlock}>
+                <ul className={styles.featureList}>
+                  {FEATURES.map((feature) => (
+                    <li key={feature} className={styles.featureItem}>
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 28 28"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{
+                          position: "absolute",
+                          left: 4,
+                          top: 4,
+                          height: "auto",
+                        }}
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M24.2106 7L22.4606 5.25L10.7939 16.9166L6.41895 12.5416L4.66895 14.2916L9.04391 18.6666L10.7939 20.4166L12.5439 18.6666L24.2106 7Z"
+                          fill="#FF0037"
+                        />
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={styles.questionBlock}>
+                For questions,&nbsp;
+                <a
+                  className={styles.chatLink}
+                  href="https://frontier.com/contact-us"
+                  target="_blank"
+                >
+                  chat with us live
+                </a>
+              </div>
+            </div>
           </div>
           {/* ── Upgrade form ─────────────────────────────────────── */}
           <div className={styles.consentForm}>
-            <form className={styles.mainForm} onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form
+              className={`showPrice && styles.mainForm`}
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate
+            >
               {/* Consent checkbox */}
               <label className={styles.consentLabel}>
                 <input
@@ -256,8 +285,21 @@ export function UBBPage({ pageName }: UBBPageProps) {
 
       {/* ── Legal Footer ─────────────────────────────────────────── */}
       <footer className={styles.legalFooter}>
-        <div className={styles.footerPad}>
+        <div>
           <p className={styles.legalText}>
+            {offerPrice && (
+              <span>
+                * For new and select Frontier Fiber customers. After the
+                promotional period, Unbreakable Wi-Fi will be billed at the
+                standard price (currently $25/mo), which is subject to change.
+                Cancel anytime. No prorated refunds will be available. Frontier
+                Fiber Internet subscription with eero router required.&nbsp;
+                <span>
+                  <br />
+                  <br />
+                </span>
+              </span>
+            )}
             Cellular data is provided by a third-party carrier, may only be used
             during an internet outage at the customer service address, and usage
             is capped at 130 GB per billing cycle. Cellular coverage, uptime and
@@ -284,6 +326,8 @@ export function UBBPage({ pageName }: UBBPageProps) {
             <br />
             <br />© 2026 Verizon. All rights reserved.
           </p>
+          <br />
+          <br />
         </div>
       </footer>
     </div>

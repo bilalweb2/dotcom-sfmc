@@ -278,9 +278,24 @@
   text-align: center;
 }
 
+ /* CSS for portrait tablets and up */
 @media (min-width: 768px) {
   .offerInner {
     width: min(975px, calc(66.666667% - 30px));
+  }
+  .consentLabel {
+    padding-right: 4px;
+  }
+  .consentText {
+    padding-right: 0px;
+  }
+  .legalText{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .columns{
+    margin-left: -15px;
+    margin-right: -15px;
   }
 }
 
@@ -325,6 +340,7 @@
   padding: 0;
   margin: 0;
   text-align: left;
+  margin-bottom: 1rem;
 }
 
 .featureItem {
@@ -354,7 +370,7 @@
   max-width: 100%;
   margin: 0 auto;
   text-align: left;
-  padding-top: 8px;
+  padding-top: 10px;
 }
 
 .consentLabel {
@@ -381,6 +397,8 @@
   font-weight: 300;
   color: #141928;
   line-height: 1.3;
+  padding-right: 10px;
+  padding-right: 10px;
 }
 
 /* ── CTA ─────────────────────────────────────────────────────────────── */
@@ -423,7 +441,7 @@
 }
 
 .legalText {
-  padding-left: 15px;  
+  padding-left: 15px;
   padding-right: 15px;
   max-width: 1232px;
   margin: 0 auto;
@@ -557,12 +575,14 @@
     max-width: 100%;
     margin-left: 16px;
   }
+  
 }
 
 @media (max-width: 992px) {
   .offer {
     padding: 64px 0;
   }
+  
 }
 
 @media (max-width: 767px) {
@@ -585,12 +605,15 @@
     font-size: 20px;
     line-height: 1.4;
   }
-  .consentForm{
+  .consentForm {
     padding-top: 8px;
     width: 100%;
   }
   .legalText {
     padding: 0;
+  }
+  .consentLabel{
+    padding-right: 8px;
   }
 }
 
@@ -618,12 +641,14 @@
   .legalText {
     padding: 0;
   }
-  .consentForm{
+  .consentForm {
     padding-top: 8px;
     width: 100%;
   }
-  .consentLabel{
+  .consentLabel {
     padding-right: 10px;
   }
-
+  .consentText {
+    padding-right: 0px;
+  }
 }

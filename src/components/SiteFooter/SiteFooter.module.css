@@ -199,4 +199,31 @@
     height: 2rem;
   }
 }
+ /* CSS for portrait tablets and up */
+@media (min-width: 768px) {
+  .heading {
+    font-family: ObjectSans-Bold, Verdana, sans-serif;
+    font-size: 18px;
+    line-height: 23px;
+    padding-bottom: 15px;
+    margin-bottom: 1rem;
 
+  }
+  .column{
+    margin-right: -15px;
+    margin-left: -15px;
+    max-width: 100%;
+    
+  }
+  .link {
+    font-family: ObjectSans-Regular, Verdana, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding-bottom: 15px;
+    word-break: break-word;
+    text-decoration: none;
+    font-weight: 400;
+    display: block;
+  }
+
+}

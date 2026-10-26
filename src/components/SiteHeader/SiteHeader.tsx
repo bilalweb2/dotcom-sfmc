@@ -259,7 +259,7 @@ export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
                           {item.label}
                           <Caret />
                         </button>
-                        <div className={styles.submenuWrap}>
+                        {/* <div className={styles.submenuWrap}>
                           <ul className={styles.submenu}>
                             {item.children.map((child) => (
                               <li key={child.label}>
@@ -292,7 +292,7 @@ export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
                               </li>
                             ))}
                           </ul>
-                        </div>
+                        </div> */}
                       </li>
                     ) : (
                       <li key={item.label} className={styles.menuItem}>
