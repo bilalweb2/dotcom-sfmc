@@ -182,6 +182,9 @@
   .rewardsVisualHeading {
     font-size: 2rem;
   }
+  .ctaSection {
+    padding: 2rem 1rem;
+  }
 }
 
 @media (max-width: 400px) {
