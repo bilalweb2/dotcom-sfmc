@@ -560,6 +560,15 @@
   .heroImg {
     display: block;
   }
+  .hero .heroImg:before {
+        content: "";
+        position: absolute;
+        top: -30%;
+        left: 0;
+        right: 0;
+        bottom: 80%;
+        background: linear-gradient(0deg, rgba(20, 25, 40, 0) 0, rgb(20, 25, 40) 30%, rgb(20, 25, 40) 0%);
+    }
 
   .heroInner {
     min-height: auto;

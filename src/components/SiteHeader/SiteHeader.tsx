@@ -242,6 +242,7 @@ export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
             className={`${styles.collapse}${mobileOpen ? ` ${styles.collapseOpen}` : ""}`}
           >
             <div className={styles.navArea}>
+            <div className={styles.navAreaPrimary}>
               <nav aria-label="Site Navigation">
                 <ul className={styles.menu}>
                   {navItems.map((item) =>
@@ -257,9 +258,9 @@ export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
                           onClick={() => toggleMenu(item.label)}
                         >
                           {item.label}
-                          <Caret />
+                          <Caret />                         
                         </button>
-                        {/* <div className={styles.submenuWrap}>
+                        <div className={styles.submenuWrap}>
                           <ul className={styles.submenu}>
                             {item.children.map((child) => (
                               <li key={child.label}>
@@ -292,7 +293,7 @@ export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
                               </li>
                             ))}
                           </ul>
-                        </div> */}
+                        </div>
                       </li>
                     ) : (
                       <li key={item.label} className={styles.menuItem}>
@@ -310,15 +311,22 @@ export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
                   )}
                 </ul>
               </nav>
-
-              <a
-                href="https://frontier.com/login"
-                className={styles.signInDesktop}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Sign In/Register
-              </a>
+            </div>
+            <div className={styles.navAreaSecondary}>
+              <ul className={styles.menu}>
+                <li className={styles.menuItem}>
+                  <a
+                  href="https://frontier.com/login"
+                  className={styles.signInDesktop}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Sign In/Register
+                </a>
+                </li>
+              </ul>
+              
+            </div>
 
               {showAudienceBar && (
                 <ul className={styles.audience}>

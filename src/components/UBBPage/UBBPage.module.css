@@ -599,8 +599,7 @@
     margin: 0 auto;
   }
 }
-
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px)  {
   .offerInner {
     /* Bootstrap col-md-8 inside a 1140px container, matching the live page. */
     width: min(66%, calc(100% - 32px));
@@ -688,5 +687,8 @@
 
   .mainNavInner {
     justify-content: space-between;
+  }
+  .consentForm {
+  max-width: 100%;
   }
 }

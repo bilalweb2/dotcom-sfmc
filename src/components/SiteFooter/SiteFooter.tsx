@@ -143,6 +143,17 @@ const legalLinks = [
   {
     label: "California Privacy Policy",
     href: "https://frontier.com/corporate/privacy-policy-california",
+  }
+];
+
+const legalLinksLivePoll = [
+  {
+    label: "CT, NE, TX Privacy Policy",
+    href: "https://frontier.com/corporate/ctnetx-privacy",
+  },
+  {
+    label: "Broadband Consumer Labels",
+    href: "https://frontier.com/consumerlabels",
   },
 ];
 
@@ -184,9 +195,15 @@ export function SiteFooter({
   showLivePollLegalLinks = false,
 }: SiteFooterProps) {
   const [openColumn, setOpenColumn] = useState<string | null>(null);
+  const visibleLegalLinks = [
+    ...legalLinks,
+    ...(showLivePollLegalLinks ? legalLinksLivePoll : []),
+  ];
 
   return (
-    <footer className={styles.root}>
+    <footer
+      className={`${showLivePollLegalLinks ? `${styles.livePoll}` : `${styles.root}`}`}
+    >
       <div className={styles.inner}>
         {showFooterColumns && (
           <div className={styles.columns}>
@@ -241,42 +258,45 @@ export function SiteFooter({
         )}
 
         <p className={styles.copyright}>© {new Date().getFullYear()} Verizon</p>
-
-        <div className={styles.bottom}>
-          {(showFooterColumns || showLivePollLegalLinks) && (
-            <nav className={styles.legal} aria-label="Footer legal">
-              {legalLinks.map(({ label, href }) => (
+        <div
+          className={showLivePollLegalLinks ? styles.flexApart : undefined}
+        >
+          <div className={styles.bottom}>
+            {(showFooterColumns || showLivePollLegalLinks) && (
+              <nav className={styles.legal} aria-label="Footer legal">
+                {visibleLegalLinks.map(({ label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    className={styles.legalLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {label}
+                  </a>
+                ))}
+              </nav>
+            )}
+            <div className={styles.social}>
+              {socialLinks.map(({ label, href, src }) => (
                 <a
                   key={label}
                   href={href}
-                  className={styles.legalLink}
+                  aria-label={label}
+                  className={styles.socialLink}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {label}
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_APP_URL ?? ""}${src}`}
+                    alt=""
+                    width={48}
+                    height={48}
+                    className={styles.socialIcon}
+                  />
                 </a>
               ))}
-            </nav>
-          )}
-          <div className={styles.social}>
-            {socialLinks.map(({ label, href, src }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                className={styles.socialLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_APP_URL ?? ""}${src}`}
-                  alt=""
-                  width={48}
-                  height={48}
-                  className={styles.socialIcon}
-                />
-              </a>
-            ))}
+            </div>
           </div>
         </div>
       </div>

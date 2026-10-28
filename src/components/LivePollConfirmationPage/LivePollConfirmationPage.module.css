@@ -117,7 +117,13 @@
 }
 
 .ctaHeading {
-  padding-bottom: 1.25rem;
+  padding-bottom: 1.5rem;
+  font-size: 1.875rem;
+  line-height: 2.375rem;
+  letter-spacing: -0.01rem;
+  font-family: "ObjectSans-Bold";
+  font-weight: 400;
+  margin-top: 0;
 }
 
 .ctaButton {

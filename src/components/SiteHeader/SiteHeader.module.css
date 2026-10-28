@@ -70,6 +70,8 @@
 }
 
 .logoLink {
+  position: relative;
+  top: 1px;
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -96,12 +98,12 @@
 }
 
 .collapse {
-  flex: 1;
-  margin-left: 42px;
+  width: 100%;
 }
 
 .navArea {
   display: flex;
+  margin-left: 42px;
   align-items: center;
   justify-content: space-between;
 }
@@ -119,12 +121,21 @@
   margin-right: 16px;
 }
 
+.navAreaSecondary {
+  display: block;
+  margin-right: -31px;
+}
+
 .navButton,
 .navLink,
 .signInDesktop {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  padding: 18px 8px 18px;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: -1px;
+  margin-bottom: -1px;
+  padding: 21px 8px 22px;
   border: 0;
   background: transparent;
   color: #ffffff;
@@ -148,8 +159,8 @@
 }
 
 .caret {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   margin-left: 6px;
   flex-shrink: 0;
   transition: transform 0.3s ease;
@@ -293,6 +304,7 @@
 
   .logoLink {
     position: absolute;
+    top: 4px;
     left: 50%;
     transform: translateX(-50%);
     max-width: 30px;
