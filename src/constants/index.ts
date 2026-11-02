@@ -6,6 +6,10 @@
 export const APP_NAME = "SFMC";
 export const APP_VERSION = "0.1.0";
 
+/** User-facing message for API / server failures — never show internal error text. */
+export const GENERIC_USER_ERROR_MESSAGE =
+  "Something went wrong. Please try again later.";
+
 /** HTTP status codes (named for readability) */
 export const HTTP_STATUS = {
   OK: 200,

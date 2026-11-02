@@ -278,22 +278,25 @@
   text-align: center;
 }
 
- /* CSS for portrait tablets and up */
 @media (min-width: 768px) {
   .offerInner {
     width: min(975px, calc(66.666667% - 30px));
   }
+
   .consentLabel {
     padding-right: 4px;
   }
+
   .consentText {
-    padding-right: 0px;
+    padding-right: 0;
   }
-  .legalText{
+
+  .legalText {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  .columns{
+
+  .columns {
     margin-left: -15px;
     margin-right: -15px;
   }
@@ -338,9 +341,8 @@
 .featureList {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 1rem;
   text-align: left;
-  margin-bottom: 1rem;
 }
 
 .featureItem {
@@ -398,7 +400,6 @@
   color: #141928;
   line-height: 1.3;
   padding-right: 10px;
-  padding-right: 10px;
 }
 
 /* ── CTA ─────────────────────────────────────────────────────────────── */
@@ -443,7 +444,7 @@
 .legalText {
   padding-left: 15px;
   padding-right: 15px;
-  max-width: 1232px;
+  max-width: 1202px;
   margin: 0 auto;
   color: #141928;
   font-family: "ObjectSans-Regular", Verdana, sans-serif;
@@ -520,7 +521,8 @@
   border: 1px solid #f5c6c6;
   border-radius: 6px;
   padding: 10px 14px;
-  margin-bottom: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   text-align: left;
 }
 
@@ -560,15 +562,26 @@
   .heroImg {
     display: block;
   }
-  .hero .heroImg:before {
-        content: "";
-        position: absolute;
-        top: -30%;
-        left: 0;
-        right: 0;
-        bottom: 80%;
-        background: linear-gradient(0deg, rgba(20, 25, 40, 0) 0, rgb(20, 25, 40) 30%, rgb(20, 25, 40) 0%);
-    }
+
+  .hero .heroImg::before {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: 0;
+    right: 0;
+    bottom: 80%;
+    background: linear-gradient(
+      0deg,
+      rgba(20, 25, 40, 0) 0,
+      rgb(20, 25, 40) 30%,
+      rgb(20, 25, 40) 0%
+    );
+  }
+
+  .heroPhoto {
+    max-width: none;
+    margin: -43px auto 0;
+  }
 
   .heroInner {
     min-height: auto;
@@ -584,14 +597,12 @@
     max-width: 100%;
     margin-left: 16px;
   }
-  
 }
 
 @media (max-width: 992px) {
   .offer {
     padding: 64px 0;
   }
-  
 }
 
 @media (max-width: 767px) {
@@ -618,11 +629,13 @@
     padding-top: 8px;
     width: 100%;
   }
+
+  .consentLabel {
+    padding-right: 8px;
+  }
+
   .legalText {
     padding: 0;
-  }
-  .consentLabel{
-    padding-right: 8px;
   }
 }
 
@@ -656,8 +669,13 @@
   }
   .consentLabel {
     padding-right: 10px;
+    padding-top: 0.1em;
   }
+
   .consentText {
-    padding-right: 0px;
+    padding-right: 0;
+  }
+  .featureTitle {
+    line-height: 1.2;
   }
 }

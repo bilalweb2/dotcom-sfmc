@@ -143,7 +143,7 @@ const legalLinks = [
   {
     label: "California Privacy Policy",
     href: "https://frontier.com/corporate/privacy-policy-california",
-  }
+  },
 ];
 
 const legalLinksLivePoll = [
@@ -201,9 +201,7 @@ export function SiteFooter({
   ];
 
   return (
-    <footer
-      className={`${showLivePollLegalLinks ? `${styles.livePoll}` : `${styles.root}`}`}
-    >
+    <footer className={showLivePollLegalLinks ? styles.livePoll : styles.root}>
       <div className={styles.inner}>
         {showFooterColumns && (
           <div className={styles.columns}>
@@ -258,9 +256,8 @@ export function SiteFooter({
         )}
 
         <p className={styles.copyright}>© {new Date().getFullYear()} Verizon</p>
-        <div
-          className={showLivePollLegalLinks ? styles.flexApart : undefined}
-        >
+
+        <div className={showLivePollLegalLinks ? styles.flexApart : undefined}>
           <div className={styles.bottom}>
             {(showFooterColumns || showLivePollLegalLinks) && (
               <nav className={styles.legal} aria-label="Footer legal">

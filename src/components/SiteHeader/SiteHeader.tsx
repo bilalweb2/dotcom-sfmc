@@ -242,91 +242,90 @@ export function SiteHeader({ showAudienceBar = true }: SiteHeaderProps) {
             className={`${styles.collapse}${mobileOpen ? ` ${styles.collapseOpen}` : ""}`}
           >
             <div className={styles.navArea}>
-            <div className={styles.navAreaPrimary}>
-              <nav aria-label="Site Navigation">
+              <div className={styles.navAreaPrimary}>
+                <nav aria-label="Site Navigation">
+                  <ul className={styles.menu}>
+                    {navItems.map((item) =>
+                      item.children ? (
+                        <li
+                          key={item.label}
+                          className={`${styles.menuItem}${openMenu === item.label ? ` ${styles.menuItemOpen}` : ""}`}
+                        >
+                          <button
+                            type="button"
+                            className={styles.navButton}
+                            aria-expanded={openMenu === item.label}
+                            onClick={() => toggleMenu(item.label)}
+                          >
+                            {item.label}
+                            <Caret />
+                          </button>
+                          <div className={styles.submenuWrap}>
+                            <ul className={styles.submenu}>
+                              {item.children.map((child) => (
+                                <li key={child.label}>
+                                  <a
+                                    href={child.href}
+                                    className={styles.subLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={closeMobile}
+                                  >
+                                    {child.label}
+                                  </a>
+                                  {child.children && (
+                                    <ul className={styles.nested}>
+                                      {child.children.map((nested) => (
+                                        <li key={nested.label}>
+                                          <a
+                                            href={nested.href}
+                                            className={`${styles.subLink} ${styles.nestedLink}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={closeMobile}
+                                          >
+                                            {nested.label}
+                                          </a>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </li>
+                      ) : (
+                        <li key={item.label} className={styles.menuItem}>
+                          <a
+                            href={item.href}
+                            className={styles.navLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={closeMobile}
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </nav>
+              </div>
+              <div className={styles.navAreaSecondary}>
                 <ul className={styles.menu}>
-                  {navItems.map((item) =>
-                    item.children ? (
-                      <li
-                        key={item.label}
-                        className={`${styles.menuItem}${openMenu === item.label ? ` ${styles.menuItemOpen}` : ""}`}
-                      >
-                        <button
-                          type="button"
-                          className={styles.navButton}
-                          aria-expanded={openMenu === item.label}
-                          onClick={() => toggleMenu(item.label)}
-                        >
-                          {item.label}
-                          <Caret />                         
-                        </button>
-                        <div className={styles.submenuWrap}>
-                          <ul className={styles.submenu}>
-                            {item.children.map((child) => (
-                              <li key={child.label}>
-                                <a
-                                  href={child.href}
-                                  className={styles.subLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  onClick={closeMobile}
-                                >
-                                  {child.label}
-                                </a>
-                                {child.children && (
-                                  <ul className={styles.nested}>
-                                    {child.children.map((nested) => (
-                                      <li key={nested.label}>
-                                        <a
-                                          href={nested.href}
-                                          className={`${styles.subLink} ${styles.nestedLink}`}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          onClick={closeMobile}
-                                        >
-                                          {nested.label}
-                                        </a>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </li>
-                    ) : (
-                      <li key={item.label} className={styles.menuItem}>
-                        <a
-                          href={item.href}
-                          className={styles.navLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={closeMobile}
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ),
-                  )}
+                  <li className={styles.menuItem}>
+                    <a
+                      href="https://frontier.com/login"
+                      className={styles.signInDesktop}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Sign In/Register
+                    </a>
+                  </li>
                 </ul>
-              </nav>
-            </div>
-            <div className={styles.navAreaSecondary}>
-              <ul className={styles.menu}>
-                <li className={styles.menuItem}>
-                  <a
-                  href="https://frontier.com/login"
-                  className={styles.signInDesktop}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Sign In/Register
-                </a>
-                </li>
-              </ul>
-              
-            </div>
+              </div>
 
               {showAudienceBar && (
                 <ul className={styles.audience}>

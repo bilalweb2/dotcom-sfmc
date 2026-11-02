@@ -21,7 +21,8 @@ import {
   type PendingDiscoFormValues,
 } from "@/utils/pendingDisValidation";
 import styles from "./PendingDisPage.module.css";
-import { API_ROUTES } from "@/constants";
+import { API_ROUTES, GENERIC_USER_ERROR_MESSAGE } from "@/constants";
+import { readCampaignParams } from "@/utils/campaignParams";
 
 const STATIC_PAYLOAD = {
   FirstName: "",
@@ -31,7 +32,6 @@ const STATIC_PAYLOAD = {
   City: "",
   State: "",
   PostalCode: "",
-  GBLUID: "",
   BTN: "",
   PageName: "Save from disconnecting",
   Offer: "2/mo free 500 HSI,then $19/mo",
@@ -45,13 +45,8 @@ interface PendingDisPageProps {
 export function PendingDisPage({ pageName }: PendingDisPageProps) {
   const router = useRouter();
 
-  // Capture Adobe Campaign click-tracking parameters from the URL
-  // e.g. ?EMEID=...&CUHID=...&CMP=...&BID=...
   const searchParams = useSearchParams();
-  const EMEID = searchParams.get("EMEID") ?? "";
-  const CUHID = searchParams.get("CUHID") ?? "";
-  const CMP = searchParams.get("CMP") ?? "";
-  const BID = searchParams.get("BID") ?? "";
+  const campaignParams = readCampaignParams(searchParams);
 
   const {
     register,
@@ -84,8 +79,7 @@ export function PendingDisPage({ pageName }: PendingDisPageProps) {
       const res = await fetch(API_ROUTES.DISCONNECTING_PROCESSING, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Merge static payload with Adobe Campaign tracking params
-        body: JSON.stringify({ ...STATIC_PAYLOAD, EMEID, CUHID, CMP, BID }),
+        body: JSON.stringify({ ...STATIC_PAYLOAD, ...campaignParams }),
       });
 
       if (!res.ok) {
@@ -100,13 +94,8 @@ export function PendingDisPage({ pageName }: PendingDisPageProps) {
       } else {
         throw new Error("Unexpected response from server");
       }
-    } catch (error) {
-      setError("root", {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-      });
+    } catch {
+      setError("root", { message: GENERIC_USER_ERROR_MESSAGE });
     }
   }
 

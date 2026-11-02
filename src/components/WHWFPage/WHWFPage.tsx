@@ -18,7 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 
 import { whwfSchema, type WHWFFormValues } from "@/utils/whwfValidation";
-import { API_ROUTES } from "@/constants";
+import { readCampaignParams } from "@/utils/campaignParams";
+import { API_ROUTES, GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 import styles from "./WHWFPage.module.css";
 
 const FEATURES = [
@@ -34,7 +35,6 @@ const STATIC_PAYLOAD = {
   City: "",
   State: "",
   PostalCode: "",
-  GBLUID: "",
   BTN: "",
   PageName: "",
   Offer: "$0 for 1 month and then $10/mo.",
@@ -49,13 +49,8 @@ interface WHWFPageProps {
 export function WHWFPage({ pageName }: WHWFPageProps) {
   const router = useRouter();
 
-  // Capture Adobe Campaign click-tracking parameters from the URL
-  // e.g. ?EMEID=...&CUHID=...&CMP=...&BID=...
   const searchParams = useSearchParams();
-  const EMEID = searchParams.get("EMEID") ?? "";
-  const CUHID = searchParams.get("CUHID") ?? "";
-  const CMP = searchParams.get("CMP") ?? "";
-  const BID = searchParams.get("BID") ?? "";
+  const campaignParams = readCampaignParams(searchParams);
 
   const {
     register,
@@ -89,8 +84,7 @@ export function WHWFPage({ pageName }: WHWFPageProps) {
       const res = await fetch(API_ROUTES.WHWF_PROCESSING, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Merge static payload with Adobe Campaign tracking params
-        body: JSON.stringify({ ...STATIC_PAYLOAD, EMEID, CUHID, CMP, BID }),
+        body: JSON.stringify({ ...STATIC_PAYLOAD, ...campaignParams }),
       });
 
       if (!res.ok) {
@@ -105,13 +99,8 @@ export function WHWFPage({ pageName }: WHWFPageProps) {
       } else {
         throw new Error("Unexpected response from server");
       }
-    } catch (error) {
-      setError("root", {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-      });
+    } catch {
+      setError("root", { message: GENERIC_USER_ERROR_MESSAGE });
     }
   }
 
@@ -215,7 +204,6 @@ export function WHWFPage({ pageName }: WHWFPageProps) {
               <br />
               <br />
 
-              
               <button
                 type="submit"
                 className={styles.ctaButton}

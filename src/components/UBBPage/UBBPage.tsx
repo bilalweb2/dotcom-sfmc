@@ -18,7 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 
 import { UbbSchema, type UBBFormValues } from "@/utils/ubbValidation";
-import { API_ROUTES } from "@/constants";
+import { readCampaignParams } from "@/utils/campaignParams";
+import { API_ROUTES, GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 import styles from "./UBBPage.module.css";
 
 const FEATURES = [
@@ -34,7 +35,6 @@ const STATIC_PAYLOAD = {
   City: "",
   State: "",
   PostalCode: "",
-  GBLUID: "",
   BTN: "",
   PageName: "",
   Offer: "",
@@ -57,13 +57,8 @@ export function UBBPage({
 }: UBBPageProps) {
   const router = useRouter();
 
-  // Capture Adobe Campaign click-tracking parameters from the URL
-  // e.g. ?EMEID=...&CUHID=...&CMP=...&BID=...
   const searchParams = useSearchParams();
-  const EMEID = searchParams.get("EMEID") ?? "";
-  const CUHID = searchParams.get("CUHID") ?? "";
-  const CMP = searchParams.get("CMP") ?? "";
-  const BID = searchParams.get("BID") ?? "";
+  const campaignParams = readCampaignParams(searchParams);
 
   const {
     register,
@@ -98,8 +93,7 @@ export function UBBPage({
       const res = await fetch(API_ROUTES.UBB_PROCESSING, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Merge static payload with Adobe Campaign tracking params
-        body: JSON.stringify({ ...STATIC_PAYLOAD, EMEID, CUHID, CMP, BID }),
+        body: JSON.stringify({ ...STATIC_PAYLOAD, ...campaignParams }),
       });
 
       if (!res.ok) {
@@ -114,13 +108,8 @@ export function UBBPage({
       } else {
         throw new Error("Unexpected response from server");
       }
-    } catch (error) {
-      setError("root", {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-      });
+    } catch {
+      setError("root", { message: GENERIC_USER_ERROR_MESSAGE });
     }
   }
 
@@ -159,12 +148,21 @@ export function UBBPage({
             <h3 className={styles.offerHeading}>
               Unbreakable<sup className={styles.offerSub}>™</sup> Wi-Fi
               automatically turns on to keep you connected during network
-              outages. {showPrice ? <><span>Only $25/mo.*</span>
-              <span className={styles.offerSpacing}>
-                <br />
-                <br />
-              </span></> : <><br /> <br/></>}
-
+              outages.
+              {showPrice ? (
+                <>
+                  <span> Only $25/mo.*</span>
+                  <span className={styles.offerSpacing}>
+                    <br />
+                    <br />
+                  </span>
+                </>
+              ) : (
+                <>
+                  <br />
+                  <br />
+                </>
+              )}
             </h3>
             <div>
               {offerPrice && (
@@ -181,27 +179,14 @@ export function UBBPage({
                 <ul className={styles.featureList}>
                   {FEATURES.map((feature) => (
                     <li key={feature} className={styles.featureItem}>
-                      <svg
-                        width="28"
-                        height="28"
-                        viewBox="0 0 28 28"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{
-                          position: "absolute",
-                          left: 4,
-                          top: 4,
-                          height: "auto",
-                        }}
+                      <Image
+                        src={`/ftr-forms/images/checkmark.png`}
+                        alt=""
                         aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M24.2106 7L22.4606 5.25L10.7939 16.9166L6.41895 12.5416L4.66895 14.2916L9.04391 18.6666L10.7939 20.4166L12.5439 18.6666L24.2106 7Z"
-                          fill="#FF0037"
-                        />
-                      </svg>
+                        width={20}
+                        height={20}
+                        className={styles.checkIcon}
+                      />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -223,7 +208,7 @@ export function UBBPage({
           {/* ── Upgrade form ─────────────────────────────────────── */}
           <div className={styles.consentForm}>
             <form
-              className={`showPrice && styles.mainForm`}
+              className={showPrice ? styles.mainForm : undefined}
               onSubmit={handleSubmit(onSubmit)}
               noValidate
             >
@@ -313,7 +298,7 @@ export function UBBPage({
             >
               frontier.com/unbreakablewifi
             </a>{" "}
-            for additional product details. Frontier Fiber Internet subscription
+            for additional product details.&nbsp; Frontier Fiber Internet subscription
             with eero router required. Requires agreement to Frontier’s Backup
             Wi-Fi Additional Terms, found at{" "}
             <a
@@ -324,7 +309,7 @@ export function UBBPage({
             </a>
             {"."}
             <br />
-            <br />© 2026 Verizon. All rights reserved.
+            <br />© 2026 Verizon.{showPrice && ( " All rights reserved.")}
           </p>
           <br />
           <br />

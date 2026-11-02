@@ -413,13 +413,13 @@
   width: 100%;
   cursor: pointer;
   text-align: left;
+  margin-top: 0.1em;
 }
 
 .consentCheckbox {
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-  margin-top: 2px;
   accent-color: #ff0037;
   cursor: pointer;
   border-radius: 4px;
@@ -469,7 +469,7 @@
 /* ── Legal footer ────────────────────────────────────────────────────── */
 .legalFooter {
   background: #f3f4f4;
-  padding: 40px 0px 35px 0px;
+  padding: 40px 0 35px;
   text-align: center;
 }
 
@@ -553,7 +553,8 @@
   border: 1px solid #f5c6c6;
   border-radius: 6px;
   padding: 10px 14px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   text-align: left;
 }
 .mainForm {
@@ -599,7 +600,8 @@
     margin: 0 auto;
   }
 }
-@media (min-width: 768px)  {
+
+@media (min-width: 768px) {
   .offerInner {
     /* Bootstrap col-md-8 inside a 1140px container, matching the live page. */
     width: min(66%, calc(100% - 32px));
@@ -671,7 +673,7 @@
     gap: 0;
   }
   .legalText {
-    padding: 0;
+    padding: 0 15px;
   }
   .heroHeading {
     font-size: clamp(6px, 9vw, 36px);
@@ -687,8 +689,5 @@
 
   .mainNavInner {
     justify-content: space-between;
-  }
-  .consentForm {
-  max-width: 100%;
   }
 }

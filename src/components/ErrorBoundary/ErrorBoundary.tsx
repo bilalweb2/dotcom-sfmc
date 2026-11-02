@@ -12,6 +12,7 @@
 "use client";
 
 import React, { Component, type ErrorInfo, type ReactNode } from "react";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 import styles from "./ErrorBoundary.module.css";
 
 // ---------------------------------------------------------------------------
@@ -73,10 +74,7 @@ export class ErrorBoundary extends Component<
               ⚠️
             </span>
             <h2 className={styles.title}>Something went wrong</h2>
-            <p className={styles.message}>
-              {error.message ||
-                "An unexpected error occurred. Please try again."}
-            </p>
+            <p className={styles.message}>{GENERIC_USER_ERROR_MESSAGE}</p>
             <button className={styles.retryButton} onClick={this.handleReset}>
               Try again
             </button>

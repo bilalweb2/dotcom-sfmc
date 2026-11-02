@@ -18,7 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 
 import { UbbSchema, type UBBFormValues } from "@/utils/ubbValidation";
-import { API_ROUTES } from "@/constants";
+import { readCampaignParams } from "@/utils/campaignParams";
+import { API_ROUTES, GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 import styles from "./UBBv2Page.module.css";
 
 const FEATURES = [
@@ -38,7 +39,6 @@ const STATIC_PAYLOAD = {
   City: "",
   State: "",
   PostalCode: "",
-  GBLUID: "",
   BTN: "",
   PageName: "",
   Offer: "",
@@ -54,13 +54,8 @@ interface UBBv2PageProps {
 export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
   const router = useRouter();
 
-  // Capture Adobe Campaign click-tracking parameters from the URL
-  // e.g. ?EMEID=...&CUHID=...&CMP=...&BID=...
   const searchParams = useSearchParams();
-  const EMEID = searchParams.get("EMEID") ?? "";
-  const CUHID = searchParams.get("CUHID") ?? "";
-  const CMP = searchParams.get("CMP") ?? "";
-  const BID = searchParams.get("BID") ?? "";
+  const campaignParams = readCampaignParams(searchParams);
 
   const {
     register,
@@ -95,8 +90,7 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
       const res = await fetch(API_ROUTES.UBB_PROCESSING, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Merge static payload with Adobe Campaign tracking params
-        body: JSON.stringify({ ...STATIC_PAYLOAD, EMEID, CUHID, CMP, BID }),
+        body: JSON.stringify({ ...STATIC_PAYLOAD, ...campaignParams }),
       });
 
       if (!res.ok) {
@@ -111,13 +105,8 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
       } else {
         throw new Error("Unexpected response from server");
       }
-    } catch (error) {
-      setError("root", {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-      });
+    } catch {
+      setError("root", { message: GENERIC_USER_ERROR_MESSAGE });
     }
   }
 
@@ -137,7 +126,7 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
         </div>
         <div className={styles.heroImg}>
           <Image
-            src={`/ftr-forms/images/UBBv2_hero.webp`}
+            src={`/ftr-forms/images/UBBv2_hero.png`}
             alt=""
             width={750}
             height={313}
@@ -150,47 +139,49 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
       {/* ── Offer section ────────────────────────────────────────── */}
       <section className={styles.offer} aria-label="Offer details">
         <div className={styles.offerInner}>
-          <h3 className={styles.offerHeading}>
-            Stay connected during internet outages and extend the Wi-Fi coverage
-            throughout your home for only $35/mo.
-            <span className={styles.offerSpacing} aria-hidden="true" />
-          </h3>
+          <div className={styles.offerContent}>
+            <h3 className={styles.offerHeading}>
+              Stay connected during internet outages and extend the Wi-Fi
+              coverage throughout your home for only $35/mo.
+              <span className={styles.offerSpacing} aria-hidden="true" />
+            </h3>
 
-          <p className={`${styles.featureTitle} ${styles.featureTitleFirst}`}>
-            Unbreakable<sup className={styles.offerSub}>™</sup> Wi-Fi:
-          </p>
-          <div className={styles.featureBlock}>
-            <ul className={styles.featureList}>
-              {FEATURES.map((feature) => (
-                <li key={feature} className={styles.featureItem}>
-                  <Image
-                    src={`/ftr-forms/images/checkmark.png`}
-                    alt=""
-                    aria-hidden="true"
-                    width={20}
-                    height={20}
-                    className={styles.checkIcon}
-                  />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-            <p className={styles.featureTitle}>Whole-Home Wi-Fi:</p>
-            <ul className={styles.featureList}>
-              {FEATURES2.map((feature) => (
-                <li key={feature} className={styles.featureItem}>
-                  <Image
-                    src={`/ftr-forms/images/checkmark.png`}
-                    alt=""
-                    aria-hidden="true"
-                    width={20}
-                    height={20}
-                    className={styles.checkIcon}
-                  />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
+            <p className={`${styles.featureTitle} ${styles.featureTitleFirst}`}>
+              Unbreakable<sup className={styles.offerSub}>™</sup> Wi-Fi:
+            </p>
+            <div className={styles.featureBlock}>
+              <ul className={styles.featureList}>
+                {FEATURES.map((feature) => (
+                  <li key={feature} className={styles.featureItem}>
+                    <Image
+                      src={`/ftr-forms/images/checkmark.png`}
+                      alt=""
+                      aria-hidden="true"
+                      width={20}
+                      height={20}
+                      className={styles.checkIcon}
+                    />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className={styles.featureTitle}>Whole-Home Wi-Fi:</p>
+              <ul className={styles.featureList}>
+                {FEATURES2.map((feature) => (
+                  <li key={feature} className={styles.featureItem}>
+                    <Image
+                      src={`/ftr-forms/images/checkmark.png`}
+                      alt=""
+                      aria-hidden="true"
+                      width={20}
+                      height={20}
+                      className={styles.checkIcon}
+                    />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* ── Upgrade form ─────────────────────────────────────── */}
@@ -226,12 +217,14 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
                   party carrier. Coverage, uptime and speeds vary. Restrictions
                   on use apply. Requires battery backup during power outages,
                   sold separately. Unbreakable Wi-Fi is powered by a Ring Alarm
-                  Pro device with Ring home security functionality disabled.
+                  Pro device with Ring home security functionality disabled. 
                   Visit frontier.com/unbreakablewifi for additional product
                   details. Requires agreement to Frontier’s Backup Wi-Fi
                   Additional Terms, found at frontier.com/unbreakableterms.
                 </span>
               </label>
+              <br />
+              <br />
 
               {/* Consent validation error */}
               {errors.consented && (
@@ -273,8 +266,10 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
             usage is capped at 130 GB per billing cycle. Cellular coverage,
             uptime and actual and average speeds will vary; maximum cellular
             speeds to device 50/5 Mbps. Not suitable for emergency/911, medical
-            and certain other uses. Up to $250 unreturned equipment fee applies.
-            Requires battery backup for power outages, sold separately. Visit{" "}
+            and certain other uses. Unbreakable Wi-Fi is powered by a Ring Alarm
+            Pro device with Ring home security functionality disabled. $250
+            unreturned equipment fee applies. Requires battery backup for power
+            outages, sold separately. Visit{" "}
             <a
               href="www.frontier.com/unbreakableterms"
               title="www.frontier.com/unbreakableterms"
@@ -298,7 +293,7 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
             internet service type. Coverage range and performance vary based on
             model, use and building conditions. Additional devices available for
             lease. Equipment non-return and restocking fees apply. For more
-            details Visit{" "}
+            details visit{" "}
             <a
               href="https://cloud.e.frontier.com/www.frontier.com/whwf"
               title="https://cloud.e.frontier.com/www.frontier.com/whwf"
@@ -307,14 +302,17 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
             </a>
             . eero max speeds are derived from IEEE specifications. Coverage
             varies based on normal use and building conditions. Actual range and
-            performance can vary. See
+            performance can vary. See{" "}
             <a href="https://eero.com/legal" title="https://eero.com/legal">
               https://eero.com/legal
             </a>{" "}
             for more details.
             <br />
             <br />© 2026 Verizon. All rights reserved.
+            <br />
+            <br />
           </p>
+          <br />
         </div>
       </footer>
     </div>

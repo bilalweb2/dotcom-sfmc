@@ -357,6 +357,7 @@
   .navArea {
     flex-direction: column;
     align-items: stretch;
+    margin-left: 0;
   }
 
   .menu {

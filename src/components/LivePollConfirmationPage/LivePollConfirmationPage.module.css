@@ -88,7 +88,8 @@
 }
 
 .rewardsParagraph {
-  margin: 0 0 1rem;
+  margin-top: 1em;
+  margin: 0 0 1em;
   color: #ffffff;
   font-family: "ObjectSans-Regular", Verdana, sans-serif;
   font-size: 1.125rem;
@@ -149,6 +150,22 @@
   transition: 0.2s all;
 }
 
+@media (min-width: 992px) {
+   .rewardsParagraph {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 1em;
+   }
+}
+
+@media (min-width: 1024px) {
+   .rewardsParagraph {
+    font-size: 1.125rem;
+    line-height: 1.444;
+   }
+}
+
+
 @media (max-width: 768px) {
   .confirmationBanner {
     padding: 2rem;
@@ -180,7 +197,8 @@
   }
 
   .rewardsVisualHeading {
-    font-size: 2rem;
+    font-size: 1.875rem;
+    line-height: 2.375rem;
   }
   .ctaSection {
     padding: 2rem 1rem;
@@ -192,3 +210,4 @@
     padding: 2rem 1rem;
   }
 }
+ 

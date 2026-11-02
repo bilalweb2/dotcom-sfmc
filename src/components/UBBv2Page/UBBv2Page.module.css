@@ -196,8 +196,8 @@
   position: relative;
   z-index: 2;
   padding: 80px 0;
-  background-image: url("/ftr-forms/images/UBBv2_hero.webp");
-  background-position: right top;
+  background-image: url("/ftr-forms/images/UBBv2_hero.png");
+  background-position: center right;
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 500px;
@@ -295,6 +295,18 @@
   display: block;
   height: 26px;
 }
+
+.offerContent {
+  font-family: "ObjectSans-Bold";
+  color: #141928;
+  font-size: 42px;
+  line-height: 50px;
+  margin-bottom: 0px;
+  padding-bottom: 46px;
+  text-transform: none;
+  text-align: center;
+}
+
 .questionBlock {
   padding-top: 0px;
   padding-bottom: 40px;
@@ -384,13 +396,13 @@
   height: auto;
 }
 .footerPad {
-  padding-bottom: 30px;
+  /* padding-bottom: 30px; */
 }
 
 /* ── Consent ────────────────────────────────────────────────────────── */
 
 .consentForm {
-  max-width: 800px;
+  max-width: 90%;
   margin: 0 auto;
   text-align: left;
 }
@@ -402,13 +414,15 @@
   width: 100%;
   cursor: pointer;
   text-align: left;
+  margin-top: 0.1em;
+  padding-right: 8px;
+  margin-bottom: 0.1em;
 }
 
 .consentCheckbox {
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-  margin-top: 2px;
   accent-color: #ff0037;
   cursor: pointer;
   border-radius: 4px;
@@ -429,7 +443,7 @@
   justify-content: center;
   width: fit-content;
   min-width: 226px;
-  margin: 32px 0 0;
+  /* margin: 35px 0 0; */
   background-color: #ff0037;
   color: #ffffff;
   font-family: "ObjectSans-Bold", Verdana, sans-serif;
@@ -540,7 +554,8 @@
   border: 1px solid #f5c6c6;
   border-radius: 6px;
   padding: 10px 14px;
-  margin-bottom: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   text-align: left;
 }
 
@@ -591,18 +606,28 @@
 }
 @media (min-width: 1200px) {
   .legalText {
-    max-width: 1232px;
+    max-width: 1202px;
   }
 }
+
 @media (max-width: 1024px) {
   .heroImg {
     display: block;
     max-width: 100%;
     padding-left: 0;
   }
+  .hero .heroImg:before {
+        content: "";
+        position: absolute;
+        top: -30%;
+        left: 0;
+        right: 0;
+        bottom: 80%;
+        background: linear-gradient(0deg, rgba(20, 25, 40, 0) 0, rgb(20, 25, 40) 30%, rgb(20, 25, 40) 0%);
+    }
   .heroPhoto {
     max-width: none;
-    margin: -20px auto 0;
+    margin: -23px auto 0;
   }
   .heroInner {
     min-height: auto;
@@ -668,5 +693,8 @@
 
   .mainNavInner {
     justify-content: space-between;
+  }
+  .consentForm {
+    max-width: 100%;
   }
 }

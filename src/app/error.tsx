@@ -9,6 +9,7 @@
  */
 import React, { useEffect } from "react";
 import Link from "next/link";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 import styles from "./error.module.css";
 
 interface ErrorPageProps {
@@ -28,7 +29,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
         <p className={styles.code}>500</p>
         <h1 className={styles.heading}>Something went wrong</h1>
         <p className={styles.subtext}>
-          An unexpected error occurred. Our team has been notified.
+          {GENERIC_USER_ERROR_MESSAGE}
           {error.digest ? (
             <>
               {" "}

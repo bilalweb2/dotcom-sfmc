@@ -21,7 +21,7 @@ import {
   type UnsubscribeFormValues,
 } from "@/utils/unsubscribeValidation";
 import { fetchDecodedEmail, postForm } from "@/utils/fetch";
-import { API_ROUTES } from "@/constants";
+import { API_ROUTES, GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 import styles from "./UnsubscribePage.module.css";
 
 export function UnsubscribePage() {
@@ -87,13 +87,8 @@ export function UnsubscribePage() {
     try {
       await postForm(API_ROUTES.UNSUB_FORM, body);
       router.push("/Unsubscribe-Confirmation");
-    } catch (error) {
-      setError("root", {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-      });
+    } catch {
+      setError("root", { message: GENERIC_USER_ERROR_MESSAGE });
     }
   }
 

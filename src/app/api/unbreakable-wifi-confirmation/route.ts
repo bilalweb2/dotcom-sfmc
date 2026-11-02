@@ -48,9 +48,21 @@
  *               PostalCode:
  *                 type: string
  *                 example: "75201"
- *               GBLUID:
+ *               EMHID:
+ *                 type: string
+ *                 example: "881b88812e0c7e2354153d8a7f967651"
+ *               EMEID:
  *                 type: string
  *                 example: ""
+ *               CUHID:
+ *                 type: string
+ *                 example: "a507ff5de160d68671e56e343762c39d"
+ *               CMP:
+ *                 type: string
+ *                 example: "CRM_R_CU_AC_EM_UPG_99_99_HOME_WIFI"
+ *               BID:
+ *                 type: string
+ *                 example: "1002031004"
  *               BTN:
  *                 type: string
  *                 example: ""
@@ -99,6 +111,7 @@ import {
 import { maskEmail } from "@/logger";
 import logger from "@/logger";
 import { cleanPayload } from "@/utils/cleanPayload";
+import { sanitiseCampaignParams } from "@/utils/campaignParams";
 
 // Max request body: 64 KB
 const MAX_BODY_BYTES = 64 * 1024;
@@ -134,8 +147,6 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     );
   }
 
-  const gblId = sanitiseString(body["GBLUID"], 100) || "abc123";
-
   // Sanitise — strip tags, trim, enforce max lengths
   const sanitised = {
     FirstName: sanitiseString(body["FirstName"], 100),
@@ -145,46 +156,25 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     City: sanitiseString(body["City"], 100),
     State: sanitiseString(body["State"], 50),
     PostalCode: sanitiseString(body["PostalCode"], 20),
-    GBLUID: gblId,
     BTN: sanitiseString(body["BTN"], 20),
     PageName: sanitiseString(body["PageName"], 200) || "BAU WHWF - v1",
     Offer:
       sanitiseString(body["Offer"], 200) || "$0 for 1 month and then $10/mo.",
     ConfirmationCheckBox: Boolean(body["ConfirmationCheckBox"]),
-    // Adobe Campaign click-tracking parameters
-    EMEID: sanitiseString(body["EMEID"], 500),
-    CUHID: sanitiseString(body["CUHID"], 500),
-    CMP: sanitiseString(body["CMP"], 200),
-    BID: sanitiseString(body["BID"], 100),
   };
 
-  const { cleanedPayload, emptyFields } = cleanPayload(sanitised);
-
-  const updateQuery: Record<string, unknown> = {};
-
-  if (Object.keys(cleanedPayload).length > 0) {
-    updateQuery["$set"] = cleanedPayload;
-  }
-
-  if (emptyFields.length > 0) {
-    updateQuery["$unset"] = Object.fromEntries(
-      emptyFields.map((field) => [field, ""]),
-    );
-  }
+  const { cleanedPayload } = cleanPayload(sanitised);
+  const campaignParams = sanitiseCampaignParams(body);
 
   await connectMongoose();
 
-  await UBBWifiModel.findOneAndUpdate({ GBLUID: gblId }, updateQuery, {
-    upsert: true,
-    returnDocument: "after",
-    runValidators: true,
-  }).lean();
+  await UBBWifiModel.create({ ...cleanedPayload, ...campaignParams });
 
   // Log with masked PII — never log raw email
   logger.info("UBB submission recorded", {
     email: maskEmail(sanitised.EmailAddress),
     pageName: sanitised.PageName,
-    hasCampaignParams: !!(sanitised.EMEID || sanitised.CMP),
+    hasCampaignParams: Object.keys(campaignParams).length > 0,
   });
 
   return NextResponse.json({ status: "OK", result: "1" }, { status: 200 });

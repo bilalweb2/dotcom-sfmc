@@ -12,33 +12,36 @@
  * | Field               | Type    | Required | Default                      | Notes                          |
  * |---------------------|---------|----------|------------------------------|--------------------------------|
  * | submissionType      | String  | No       | ''                           | SFMC submission category       |
- * | FirstName           | String  | No       | ''                           | Customer first name; PII       |
- * | LastName            | String  | No       | ''                           | Customer last name; PII        |
- * | EmailAddress        | String  | No       | ''                           | Normalised lowercase; PII      |
- * | Address             | String  | No       | ''                           | Street address; PII            |
- * | City                | String  | No       | ''                           | City                           |
- * | State               | String  | No       | ''                           | State abbreviation (2 chars)   |
- * | PostalCode          | String  | No       | ''                           | US ZIP code                    |
- * | GBLUID              | String  | No       | ''                           | SFMC global unique ID          |
- * | BTN                 | String  | No       | ''                           | Billing telephone number; PII  |
+ * | FirstName           | String  | No       | —                            | Customer first name; PII       |
+ * | LastName            | String  | No       | —                            | Customer last name; PII        |
+ * | EmailAddress        | String  | No       | —                            | Normalised lowercase; PII      |
+ * | Address             | String  | No       | —                            | Street address; PII            |
+ * | City                | String  | No       | —                            | City                           |
+ * | State               | String  | No       | —                            | State abbreviation (2 chars)   |
+ * | PostalCode          | String  | No       | —                            | US ZIP code                    |
+ * | BTN                 | String  | No       | —                            | Billing telephone number; PII  |
+ * | EMHID               | String  | No       | —                            | Adobe Campaign parameter       |
+ * | EMEID               | String  | No       | —                            | Adobe Campaign parameter       |
+ * | CUHID               | String  | No       | —                            | Adobe Campaign parameter       |
+ * | CMP                 | String  | No       | —                            | Adobe Campaign campaign code   |
+ * | BID                 | String  | No       | —                            | Adobe Campaign batch ID        |
  * | PageName            | String  | No       | 'BAU WHWF - v1'              | Campaign page identifier       |
  * | Offer               | String  | No       | '$0 for 1 month…'            | Offer description              |
  * | ConfirmationCheckBox| Boolean  | No       | 0                            | 1 = confirmed, 0 = not         |
- * | createdAt           | Date    | Auto     | now()                        | Injected by Mongoose timestamps|
+ * | SubmitDate          | Date    | Auto     | now()                        | Injected by Mongoose timestamps|
  *
  * ## Indexes
  * | Name                | Fields                        | Purpose                                    |
  * |---------------------|-------------------------------|--------------------------------------------|
  * | email_1             | { EmailAddress: 1 }           | Fast lookup by email address               |
- * | gbluid_1            | { GBLUID: 1 }                 | SFMC cross-reference lookup                |
  * | createdAt_-1        | { createdAt: -1 }             | Time-range queries / newest-first exports  |
  * | postalCode_1        | { PostalCode: 1 }             | Geographic/regional reporting queries      |
  * | email_createdAt     | { EmailAddress:1, createdAt:-1}| Latest record per email (compound)        |
  *
  * ## Unique constraints
  * None — this is an **event-log** collection. A customer may submit the WHWF
- * form multiple times (retry after failure, multiple devices, etc.). Uniqueness
- * is enforced at the application layer when required.
+ * form multiple times (retry after failure, multiple devices, etc.). Each
+ * successful request creates a new document.
  *
  * ## Timestamps
  * `createdAt` is auto-managed by Mongoose (`timestamps: { createdAt: 'createdAt', updatedAt: false }`).
@@ -56,20 +59,20 @@ import mongoose, { type Document, type Model, Schema } from "mongoose";
 // ---------------------------------------------------------------------------
 
 export interface IUBBWifi extends Document {
-  FirstName: string;
-  LastName: string;
-  EmailAddress: string;
-  Address: string;
-  City: string;
-  State: string;
-  PostalCode: string;
-  GBLUID: string;
-  BTN: string;
+  FirstName?: string;
+  LastName?: string;
+  EmailAddress?: string;
+  Address?: string;
+  City?: string;
+  State?: string;
+  PostalCode?: string;
+  BTN?: string;
   PageName: string;
   Offer: string;
   ConfirmationCheckBox: boolean;
   SubmitDate: Date;
   /** Adobe Campaign click-tracking parameters (appended to every link) */
+  EMHID?: string;
   EMEID?: string;
   CUHID?: string;
   CMP?: string;
@@ -83,49 +86,36 @@ const UBBWifiSchema = new Schema<IUBBWifi>(
   {
     FirstName: {
       type: String,
-      default: "",
       trim: true,
     },
     LastName: {
       type: String,
-      default: "",
       trim: true,
     },
     EmailAddress: {
       type: String,
-      default: "",
       trim: true,
       lowercase: true,
     },
     Address: {
       type: String,
-      default: "",
       trim: true,
     },
     City: {
       type: String,
-      default: "",
       trim: true,
     },
     State: {
       type: String,
-      default: "",
       trim: true,
       maxlength: [2, "State must be a 2-character abbreviation"],
     },
     PostalCode: {
       type: String,
-      default: "",
-      trim: true,
-    },
-    GBLUID: {
-      type: String,
-      default: "",
       trim: true,
     },
     BTN: {
       type: String,
-      default: "",
       trim: true,
     },
     PageName: {
@@ -144,13 +134,14 @@ const UBBWifiSchema = new Schema<IUBBWifi>(
     },
     // ── Adobe Campaign click-tracking parameters ──────────────────────────
     /** Hex-encoded AES-256-CBC encrypted subscriber identifier (as received) */
-    EMEID: { type: String, default: "", trim: true },
+    EMHID: { type: String, trim: true },
+    EMEID: { type: String, trim: true },
     /** Contact Unique Hash ID passed by Adobe Campaign */
-    CUHID: { type: String, default: "", trim: true },
+    CUHID: { type: String, trim: true },
     /** Campaign code (e.g. CRM_R_CU_AC_EM_AAL_26_10_FTR_TEST) */
-    CMP: { type: String, default: "", trim: true },
+    CMP: { type: String, trim: true },
     /** Batch ID from Adobe Campaign delivery */
-    BID: { type: String, default: "", trim: true },
+    BID: { type: String, trim: true },
   },
   {
     // createdAt is auto-added; updatedAt is disabled — records are immutable.
@@ -166,9 +157,6 @@ const UBBWifiSchema = new Schema<IUBBWifi>(
 
 // Fast email lookup (most common query pattern)
 UBBWifiSchema.index({ EmailAddress: 1 }, { name: "email_1" });
-
-// SFMC cross-reference — filter/join by GBLUID
-UBBWifiSchema.index({ GBLUID: 1 }, { name: "gbluid_1" });
 
 // Time-range queries and data exports (newest first)
 UBBWifiSchema.index({ createdAt: -1 }, { name: "createdAt_-1" });
