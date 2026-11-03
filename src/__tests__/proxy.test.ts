@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { NextRequest } from "next/server";
 import { logApiExchange } from "@/utils/apiLog";
 import logger from "@/logger";
@@ -69,7 +70,7 @@ describe("proxy", () => {
   it("allows private API requests with a bearer token", () => {
     const response = proxy(
       createRequest("/ftr-forms/api/private", "GET", {
-        authorization: "Bearer valid-token",
+        authorization: `Bearer ${randomUUID()}`,
         "x-forwarded-for": "192.0.2.4",
       }),
     );

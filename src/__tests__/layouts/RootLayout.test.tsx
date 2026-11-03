@@ -5,6 +5,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { RootLayout } from "@/layouts/RootLayout/RootLayout";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 
 describe("RootLayout", () => {
   let consoleError: jest.SpyInstance;
@@ -43,7 +44,7 @@ describe("RootLayout", () => {
     expect(
       screen.getByRole("heading", { name: "Something went wrong" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Page rendering failed")).toBeInTheDocument();
+    expect(screen.getByText(GENERIC_USER_ERROR_MESSAGE)).toBeInTheDocument();
     expect(consoleError).toHaveBeenCalledWith(
       "[ErrorBoundary] Uncaught error:",
       expect.objectContaining({ message: "Page rendering failed" }),

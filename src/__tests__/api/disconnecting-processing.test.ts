@@ -10,9 +10,7 @@ jest.mock("@/libs/mongoose", () => ({
 
 jest.mock("@/models/PendingDisco", () => ({
   PendingDiscoModel: {
-    findOneAndUpdate: jest.fn().mockReturnValue({
-      lean: jest.fn().mockResolvedValue({ _id: "mock-id" }),
-    }),
+    create: jest.fn().mockResolvedValue({ _id: "mock-id" }),
   },
 }));
 
@@ -45,12 +43,6 @@ function makeJsonRequest(body: Record<string, unknown>): NextRequest {
   });
 }
 
-const UPDATE_OPTIONS = {
-  upsert: true,
-  returnDocument: "after",
-  runValidators: true,
-} as const;
-
 const VALID_PAYLOAD = {
   FirstName: "Jane",
   LastName: "Doe",
@@ -59,7 +51,6 @@ const VALID_PAYLOAD = {
   City: "Dallas",
   State: "TX",
   PostalCode: "75201",
-  GBLUID: "gbl-abc-123",
   BTN: "8005551234",
   submissionType: "pending-disco",
   PageName: "Save from disconnecting",
@@ -68,187 +59,105 @@ const VALID_PAYLOAD = {
 };
 
 const CAMPAIGN_PARAMS = {
+  EMHID: "881b88812e0c7e2354153d8a7f967651",
   EMEID: "vVcez3yM9M3nm8l+PtOxqg==",
   CUHID: "ce657692ae19f328a459aa07b327136e665b02b9fb29f4768cede5ffb26e968f",
   CMP: "CRM_R_CU_AC_EM_AAL_26_10_FTR_TEST",
   BID: "628055001",
 };
+const createMock = PendingDiscoModel.create as jest.Mock;
 
 describe("POST /ftr-forms/api/disconnecting-processing", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("successful submission", () => {
-    it('returns 200 with { status: "OK", result: "1" }', async () => {
-      const response = await POST(makeJsonRequest(VALID_PAYLOAD));
-      const body = await response.json();
-
-      expect(response.status).toBe(200);
-      expect(body).toEqual({ status: "OK", result: "1" });
-    });
-
-    it("connects to MongoDB for form persistence and audit logging", async () => {
-      await POST(makeJsonRequest(VALID_PAYLOAD));
-
-      expect(connectMongoose).toHaveBeenCalledTimes(2);
-    });
-
-    it("persists all provided fields to PendingDiscoModel", async () => {
-      await POST(makeJsonRequest(VALID_PAYLOAD));
-
-      expect(PendingDiscoModel.findOneAndUpdate).toHaveBeenCalledWith(
-        { GBLUID: "gbl-abc-123" },
-        {
-          $set: expect.objectContaining({
-            FirstName: "Jane",
-            LastName: "Doe",
-            EmailAddress: "jane.doe@example.com",
-            Address: "123 Main St",
-            City: "Dallas",
-            State: "TX",
-            PostalCode: "75201",
-            GBLUID: "gbl-abc-123",
-            BTN: "8005551234",
-            PageName: "Save from disconnecting",
-            Offer: "2/mo free 500 HSI,then $19/mo",
-            ConfirmationCheckBox: true,
-          }),
-          $unset: {
-            BID: "",
-            CMP: "",
-            CUHID: "",
-            EMEID: "",
-          },
-        },
-        UPDATE_OPTIONS,
-      );
-    });
-
-    it("applies default values for optional fields when omitted", async () => {
-      await POST(
-        makeJsonRequest({
-          FirstName: "Jane",
-          LastName: "Doe",
-          EmailAddress: "min@example.com",
-        }),
-      );
-
-      expect(PendingDiscoModel.findOneAndUpdate).toHaveBeenCalledWith(
-        { GBLUID: "abc123" },
-        {
-          $set: {
-            ConfirmationCheckBox: false,
-            EmailAddress: "min@example.com",
-            FirstName: "Jane",
-            GBLUID: "abc123",
-            LastName: "Doe",
-            Offer: "2/mo free 500 HSI,then $19/mo",
-            PageName: "Save from disconnecting",
-          },
-          $unset: {
-            Address: "",
-            BID: "",
-            BTN: "",
-            CMP: "",
-            CUHID: "",
-            City: "",
-            EMEID: "",
-            PostalCode: "",
-            State: "",
-            submissionType: "",
-          },
-        },
-        UPDATE_OPTIONS,
-      );
-    });
-
-    it("converts ConfirmationCheckBox to a Boolean", async () => {
-      await POST(
-        makeJsonRequest({ ...VALID_PAYLOAD, ConfirmationCheckBox: 0 }),
-      );
-
-      expect(PendingDiscoModel.findOneAndUpdate).toHaveBeenCalledWith(
-        { GBLUID: "gbl-abc-123" },
-        expect.objectContaining({
-          $set: expect.objectContaining({ ConfirmationCheckBox: false }),
-        }),
-        UPDATE_OPTIONS,
-      );
-    });
+  it('returns 200 with { status: "OK", result: "1" }', async () => {
+    const response = await POST(makeJsonRequest(VALID_PAYLOAD));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ status: "OK", result: "1" });
   });
 
-  describe("Adobe Campaign parameters (EMEID / CUHID / CMP / BID)", () => {
-    it("persists all four campaign params when provided in the payload", async () => {
-      await POST(makeJsonRequest({ ...VALID_PAYLOAD, ...CAMPAIGN_PARAMS }));
+  it("creates a new document for every submission and excludes GBLUID", async () => {
+    await POST(makeJsonRequest({ ...VALID_PAYLOAD, GBLUID: "legacy-id" }));
+    await POST(makeJsonRequest({ ...VALID_PAYLOAD, GBLUID: "legacy-id" }));
 
-      expect(PendingDiscoModel.findOneAndUpdate).toHaveBeenCalledWith(
-        { GBLUID: "gbl-abc-123" },
-        {
-          $set: expect.objectContaining({
-            EMEID: "vVcez3yM9M3nm8l+PtOxqg==",
-            CUHID:
-              "ce657692ae19f328a459aa07b327136e665b02b9fb29f4768cede5ffb26e968f",
-            CMP: "CRM_R_CU_AC_EM_AAL_26_10_FTR_TEST",
-            BID: "628055001",
-          }),
-        },
-        UPDATE_OPTIONS,
-      );
-    });
-
-    it("unsets campaign params when omitted from the payload", async () => {
-      await POST(makeJsonRequest(VALID_PAYLOAD));
-
-      expect(PendingDiscoModel.findOneAndUpdate).toHaveBeenCalledWith(
-        { GBLUID: "gbl-abc-123" },
-        expect.objectContaining({
-          $unset: {
-            BID: "",
-            CMP: "",
-            CUHID: "",
-            EMEID: "",
-          },
-        }),
-        UPDATE_OPTIONS,
-      );
-    });
+    expect(createMock).toHaveBeenCalledTimes(2);
+    expect(createMock.mock.calls[0]?.[0]).not.toHaveProperty("GBLUID");
   });
 
-  describe("error handling", () => {
-    it("returns 500 when PendingDiscoModel.findOneAndUpdate throws", async () => {
-      (PendingDiscoModel.findOneAndUpdate as jest.Mock).mockReturnValueOnce({
-        lean: jest.fn().mockRejectedValueOnce(new Error("DB write failed")),
-      });
+  it("stores all campaign parameters separately when present", async () => {
+    await POST(makeJsonRequest({ ...VALID_PAYLOAD, ...CAMPAIGN_PARAMS }));
+    expect(createMock).toHaveBeenCalledWith(
+      expect.objectContaining(CAMPAIGN_PARAMS),
+    );
+  });
 
-      const response = await POST(makeJsonRequest(VALID_PAYLOAD));
-      const body = await response.json();
+  it("leaves absent campaign parameters unset", async () => {
+    await POST(makeJsonRequest(VALID_PAYLOAD));
 
-      expect(response.status).toBe(500);
-      expect(body.error).toBe("Internal Server Error");
-      expect(body.timestamp).toBeDefined();
+    const document = createMock.mock.calls[0]?.[0] as Record<string, unknown>;
+    for (const key of Object.keys(CAMPAIGN_PARAMS)) {
+      expect(document).not.toHaveProperty(key);
+    }
+  });
+
+  it("does not persist empty string fields", async () => {
+    await POST(
+      makeJsonRequest({
+        ...VALID_PAYLOAD,
+        submissionType: "",
+        FirstName: "",
+        LastName: "",
+        EmailAddress: "",
+        Address: "",
+        City: "",
+        State: "",
+        PostalCode: "",
+        BTN: "",
+      }),
+    );
+
+    const document = createMock.mock.calls[0]?.[0] as Record<string, unknown>;
+    for (const key of [
+      "submissionType",
+      "FirstName",
+      "LastName",
+      "EmailAddress",
+      "Address",
+      "City",
+      "State",
+      "PostalCode",
+      "BTN",
+    ]) {
+      expect(document).not.toHaveProperty(key);
+    }
+  });
+
+  it("rejects request bodies over the size limit", async () => {
+    const request = new NextRequest(BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": String(64 * 1024 + 1),
+      },
+      body: "{}",
     });
 
-    it("returns 500 when connectMongoose throws", async () => {
-      (connectMongoose as jest.Mock).mockRejectedValueOnce(
-        new Error("Connection refused"),
-      );
+    const response = await POST(request);
+    expect(response.status).toBe(413);
+    expect(createMock).not.toHaveBeenCalled();
+  });
 
-      const response = await POST(makeJsonRequest(VALID_PAYLOAD));
+  it("keeps the API audit logging connection", async () => {
+    await POST(makeJsonRequest(VALID_PAYLOAD));
+    expect(connectMongoose).toHaveBeenCalledTimes(2);
+  });
 
-      expect(response.status).toBe(500);
-    });
-
-    it("returns 500 when request body is not valid JSON", async () => {
-      const badRequest = new NextRequest(BASE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: "not-json{{{",
-      });
-
-      const response = await POST(badRequest);
-
-      expect(response.status).toBe(500);
-    });
+  it("returns 500 when document creation fails", async () => {
+    createMock.mockRejectedValueOnce(new Error("DB write failed"));
+    const response = await POST(makeJsonRequest(VALID_PAYLOAD));
+    expect(response.status).toBe(500);
+    expect((await response.json()).error).toBe("Internal Server Error");
   });
 });

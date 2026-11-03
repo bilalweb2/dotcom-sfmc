@@ -96,6 +96,24 @@ describe("SiteFooter", () => {
     ).toBeInTheDocument();
   });
 
+  it("adds Live Poll legal links and hides the footer columns", () => {
+    render(<SiteFooter showFooterColumns={false} showLivePollLegalLinks />);
+
+    const legalNav = screen.getByRole("navigation", { name: "Footer legal" });
+    expect(within(legalNav).getAllByRole("link")).toHaveLength(8);
+    expect(
+      within(legalNav).getByRole("link", {
+        name: "CT, NE, TX Privacy Policy",
+      }),
+    ).toHaveAttribute("href", "https://frontier.com/corporate/ctnetx-privacy");
+    expect(
+      within(legalNav).getByRole("link", { name: "Broadband Consumer Labels" }),
+    ).toHaveAttribute("href", "https://frontier.com/consumerlabels");
+    expect(
+      screen.queryByRole("button", { name: "Shop" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("uses a relative social image path when no public app URL is configured", () => {
     // delete process.env.NEXT_PUBLIC_APP_URL;
     render(<SiteFooter />);

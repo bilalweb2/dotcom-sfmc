@@ -6,8 +6,6 @@
  * @jest-environment node
  */
 
-import crypto from "node:crypto";
-
 // ---------------------------------------------------------------------------
 // Re-import after mutating process.env in each test group.
 // We use jest.isolateModules() where env changes affect module-level reads,
@@ -15,7 +13,7 @@ import crypto from "node:crypto";
 // delete + assign pattern works fine for these utilities.
 // ---------------------------------------------------------------------------
 
-// Known test credentials (never use in production)
+// Known test values (never use in production)
 /** 32-byte AES-256 key — hex (64 chars, all zeros) */
 const KEY_HEX = "0".repeat(64);
 /** 16-byte IV — hex (32 chars, all zeros) */
@@ -25,17 +23,17 @@ const KEY_B64 = Buffer.alloc(32, 0).toString("base64"); // 44 chars with padding
 /** Same IV as Base64 */
 const IV_B64 = Buffer.alloc(16, 0).toString("base64"); // 24 chars with padding
 
-const KEY_BUF = Buffer.from(KEY_HEX, "hex");
-const IV_BUF = Buffer.from(IV_HEX, "hex");
-
-/** AES-256-CBC encrypt a string with explicit key and IV; returns Buffer. */
-function rawEncrypt(plaintext: string, key: Buffer, iv: Buffer): Buffer {
-  const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-  return Buffer.concat([
-    cipher.update(Buffer.from(plaintext, "utf8")),
-    cipher.final(),
-  ]);
-}
+const CIPHERTEXT_HEX = {
+  subscriber:
+    "d1c79bc5aac47f78962a1eabbdf50de12920152a7a58bd1860859a1102395d53",
+  user: "199db1cf4c302791e35812c6ec52497def0cdb39983c7c807a31a88d91947c68",
+  hello: "a533dca7f2c655c9f09163ee7c3bd02a",
+  minimal: "b4a5e98af6810a83bdf52b14ae822c37",
+  legacy: "e553d8263ae9cbecfb41d1b866ab4db1262496ad070b72e0c52a04bddeebe680",
+  shortBlock: "e202c8ad9ade49497d2c2ad848f309cf",
+  embedded: "77e3bc5194fc2c481e6b15848ab9a22a0b12459737f44ee1bbc4c4315f11c67a",
+  randomIv: "e5a39646a9bd0a6dd53299ebd313f77e73c1f22db46e8a32efb769594db86b32",
+} as const;
 
 // ---------------------------------------------------------------------------
 // isValidEMEID
@@ -147,22 +145,24 @@ describe("decodeEMEID — fixed-IV mode", () => {
 
   it("decrypts a hex-encoded ciphertext to the original plaintext", () => {
     const plaintext = "subscriber@example.com";
-    const cipherHex = rawEncrypt(plaintext, KEY_BUF, IV_BUF).toString("hex");
 
-    expect(decodeEMEID(cipherHex)).toBe(plaintext);
+    expect(decodeEMEID(CIPHERTEXT_HEX.subscriber)).toBe(plaintext);
   });
 
   it("decrypts a Base64-encoded ciphertext to the original plaintext", () => {
     const plaintext = "user@frontier.com";
-    const cipherB64 = rawEncrypt(plaintext, KEY_BUF, IV_BUF).toString("base64");
+    const cipherB64 = Buffer.from(CIPHERTEXT_HEX.user, "hex").toString(
+      "base64",
+    );
 
     expect(decodeEMEID(cipherB64)).toBe(plaintext);
   });
 
   it("decrypts the sample EMEID value from the URL when key + IV are correct", () => {
-    // vVcez3yM9M3nm8l+PtOxqg== (16 bytes) — pre-encrypted with KEY_BUF / IV_BUF
     const plaintext = "hello@test.com";
-    const cipherB64 = rawEncrypt(plaintext, KEY_BUF, IV_BUF).toString("base64");
+    const cipherB64 = Buffer.from(CIPHERTEXT_HEX.hello, "hex").toString(
+      "base64",
+    );
 
     // Round-trip must return the original value
     expect(decodeEMEID(cipherB64)).toBe(plaintext);
@@ -170,10 +170,9 @@ describe("decodeEMEID — fixed-IV mode", () => {
 
   it("treats the entire EMEID as ciphertext (no embedded-IV prefix)", () => {
     const plaintext = "a"; // minimal plaintext
-    const cipherHex = rawEncrypt(plaintext, KEY_BUF, IV_BUF).toString("hex");
     // Result must be one AES block (16 bytes = 32 hex chars)
-    expect(cipherHex.length).toBe(32);
-    expect(decodeEMEID(cipherHex)).toBe(plaintext);
+    expect(CIPHERTEXT_HEX.minimal.length).toBe(32);
+    expect(decodeEMEID(CIPHERTEXT_HEX.minimal)).toBe(plaintext);
   });
 
   it("falls back to EMEID_* env vars when EMEID_* are absent", () => {
@@ -183,9 +182,8 @@ describe("decodeEMEID — fixed-IV mode", () => {
     process.env.EMEID_AES_IV = IV_HEX;
 
     const plaintext = "legacy@example.com";
-    const cipherHex = rawEncrypt(plaintext, KEY_BUF, IV_BUF).toString("hex");
 
-    expect(decodeEMEID(cipherHex)).toBe(plaintext);
+    expect(decodeEMEID(CIPHERTEXT_HEX.legacy)).toBe(plaintext);
   });
 
   it("throws for an invalid EMEID value (odd-length hex)", () => {
@@ -193,16 +191,16 @@ describe("decodeEMEID — fixed-IV mode", () => {
   });
 
   it("throws when the ciphertext was encrypted with a different key", () => {
-    const wrongKey = Buffer.alloc(32, 0xff);
-    const cipherHex = rawEncrypt("secret", wrongKey, IV_BUF).toString("hex");
+    process.env.EMEID_AES_KEY = Buffer.alloc(32, 0xff).toString("hex");
 
-    expect(() => decodeEMEID(cipherHex)).toThrow(/Failed to decrypt/i);
+    expect(() => decodeEMEID(CIPHERTEXT_HEX.shortBlock)).toThrow(
+      /Failed to decrypt/i,
+    );
   });
 
   it("throws when the ciphertext is corrupted (truncated)", () => {
-    const cipherHex = rawEncrypt("secret", KEY_BUF, IV_BUF).toString("hex");
     // Truncate to an incomplete block
-    const truncated = cipherHex.slice(0, 8); // 4 bytes — not a full AES block
+    const truncated = CIPHERTEXT_HEX.shortBlock.slice(0, 8); // 4 bytes — not a full AES block
 
     // The truncated hex is still even-length, so isValidEMEID passes.
     // Decryption should fail because 4 bytes is not a valid AES-CBC block.
@@ -232,19 +230,14 @@ describe("decodeEMEID — embedded-IV mode", () => {
 
   it("extracts the first 16 bytes as IV and the remainder as ciphertext", () => {
     const plaintext = "embedded@example.com";
-    // Manually build: IV (16 zero bytes) + ciphertext
-    const iv = Buffer.alloc(16, 0);
-    const ciphertext = rawEncrypt(plaintext, KEY_BUF, iv);
-    const combined = Buffer.concat([iv, ciphertext]).toString("hex");
+    const combined = `${"0".repeat(32)}${CIPHERTEXT_HEX.embedded}`;
 
     expect(decodeEMEID(combined)).toBe(plaintext);
   });
 
   it("decrypts correctly when IV is non-zero (random-like)", () => {
     const plaintext = "random-iv@test.com";
-    const iv = Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex");
-    const ciphertext = rawEncrypt(plaintext, KEY_BUF, iv);
-    const combined = Buffer.concat([iv, ciphertext]).toString("hex");
+    const combined = `0102030405060708090a0b0c0d0e0f10${CIPHERTEXT_HEX.randomIv}`;
 
     expect(decodeEMEID(combined)).toBe(plaintext);
   });

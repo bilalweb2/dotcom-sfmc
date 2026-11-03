@@ -7,7 +7,7 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { UBBPage } from "@/components/UBBPage";
 import { API_ROUTES } from "@/constants";
 
@@ -36,6 +36,7 @@ describe("UBBPage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
     (global.fetch as jest.Mock).mockClear();
   });
 
@@ -142,6 +143,11 @@ describe("UBBPage", () => {
       "sends PageName and offer for $label to the UBB processing API",
       async ({ props }) => {
         const user = userEvent.setup();
+        (useSearchParams as jest.Mock).mockReturnValue(
+          new URLSearchParams(
+            "EMHID=emhid-val&EMEID=emeid-val&CUHID=cuhid-val&CMP=cmp-val&BID=bid-val",
+          ),
+        );
         (global.fetch as jest.Mock).mockResolvedValueOnce({
           ok: true,
           json: jest.fn().mockResolvedValueOnce({
@@ -172,6 +178,12 @@ describe("UBBPage", () => {
           expect(body.PageName).toBe(props.pageName);
           expect(body.Offer).toBe(props.Offer);
           expect(body.ConfirmationCheckBox).toBe(true);
+          expect(body).not.toHaveProperty("GBLUID");
+          expect(body.EMHID).toBe("emhid-val");
+          expect(body.EMEID).toBe("emeid-val");
+          expect(body.CUHID).toBe("cuhid-val");
+          expect(body.CMP).toBe("cmp-val");
+          expect(body.BID).toBe("bid-val");
         });
       },
     );

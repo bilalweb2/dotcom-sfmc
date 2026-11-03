@@ -13,6 +13,6 @@ export const metadata: Metadata = {
  */
 export default function UBBConfirmation() {
   return (
-    <WHWFConfirmationPage message="Now you can enjoy peace of mind with a backup connection during network outages." />
+    <WHWFConfirmationPage message="Now you can enjoy peace of mind with a backup connection during network outages." orderNow={false} UBB={true}/>
   );
 }

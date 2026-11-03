@@ -7,8 +7,9 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { WHWFPage } from "@/components/WHWFPage";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 
 // ── Mocks ─────────────────────────────────────────────────────────────────
 jest.mock("next/navigation", () => ({
@@ -33,6 +34,7 @@ describe("WHWFPage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
     (global.fetch as jest.Mock).mockClear();
   });
 
@@ -216,6 +218,11 @@ describe("WHWFPage", () => {
 
     it("sends correct request body with pageName", async () => {
       const user = userEvent.setup();
+      (useSearchParams as jest.Mock).mockReturnValue(
+        new URLSearchParams(
+          "EMHID=emhid-val&EMEID=emeid-val&CUHID=cuhid-val&CMP=cmp-val&BID=bid-val",
+        ),
+      );
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: jest.fn().mockResolvedValueOnce({
@@ -241,6 +248,12 @@ describe("WHWFPage", () => {
         expect(body.PageName).toBe("Test Page Name");
         expect(body.Offer).toBe("$0 for 1 month and then $10/mo.");
         expect(body.ConfirmationCheckBox).toBe(true);
+        expect(body).not.toHaveProperty("GBLUID");
+        expect(body.EMHID).toBe("emhid-val");
+        expect(body.EMEID).toBe("emeid-val");
+        expect(body.CUHID).toBe("cuhid-val");
+        expect(body.CMP).toBe("cmp-val");
+        expect(body.BID).toBe("bid-val");
       });
     });
 
@@ -342,7 +355,9 @@ describe("WHWFPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Server error/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
 
@@ -364,7 +379,9 @@ describe("WHWFPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Submission failed/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
 
@@ -390,7 +407,7 @@ describe("WHWFPage", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(/Unexpected response from server/),
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
         ).toBeInTheDocument();
       });
     });
@@ -412,7 +429,9 @@ describe("WHWFPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Network error/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
 
@@ -431,7 +450,9 @@ describe("WHWFPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
 
@@ -452,7 +473,7 @@ describe("WHWFPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        const errorElement = screen.getByText(/Test error/);
+        const errorElement = screen.getByText(GENERIC_USER_ERROR_MESSAGE);
         expect(errorElement).toHaveAttribute("role", "alert");
       });
     });
@@ -569,7 +590,10 @@ describe("WHWFPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Test error/)).toHaveAttribute("role", "alert");
+        expect(screen.getByText(GENERIC_USER_ERROR_MESSAGE)).toHaveAttribute(
+          "role",
+          "alert",
+        );
       });
     });
   });

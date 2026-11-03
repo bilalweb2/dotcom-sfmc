@@ -5,6 +5,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import ErrorPage from "@/app/error";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 
 describe("ErrorPage", () => {
   let consoleError: jest.SpyInstance;
@@ -29,8 +30,8 @@ describe("ErrorPage", () => {
       screen.getByRole("heading", { name: "Something went wrong" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /An unexpected error occurred\. Our team has been notified\./,
+      screen.getByText((content) =>
+        content.includes(GENERIC_USER_ERROR_MESSAGE),
       ),
     ).toBeInTheDocument();
     expect(screen.getByText("err-123")).toBeInTheDocument();

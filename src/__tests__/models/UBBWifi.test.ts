@@ -21,8 +21,10 @@ describe("UBBWifiModel", () => {
       expect(doc.PageName).toBe("UBB-Connected Living");
       expect(doc.Offer).toBe("Unbreakable $25/mo");
       expect(doc.ConfirmationCheckBox).toBe(false);
-      expect(doc.FirstName).toBe("");
-      expect(doc.EmailAddress).toBe("");
+      expect(doc.FirstName).toBeUndefined();
+      expect(doc.EmailAddress).toBeUndefined();
+      expect(doc.Address).toBeUndefined();
+      expect(doc.BTN).toBeUndefined();
     });
   });
 
@@ -63,17 +65,38 @@ describe("UBBWifiModel", () => {
   describe("Adobe Campaign tracking fields", () => {
     it("stores optional campaign parameters when provided", () => {
       const doc = new UBBWifiModel({
+        EMHID: "emhid123",
         EMEID: "abc123",
         CUHID: "hash-id",
         CMP: "CRM_TEST",
         BID: "628055001",
       });
 
+      expect(doc.EMHID).toBe("emhid123");
       expect(doc.EMEID).toBe("abc123");
       expect(doc.CUHID).toBe("hash-id");
       expect(doc.CMP).toBe("CRM_TEST");
       expect(doc.BID).toBe("628055001");
     });
+
+    it("leaves campaign fields unset when omitted", () => {
+      const doc = new UBBWifiModel({});
+
+      expect(doc.EMHID).toBeUndefined();
+      expect(doc.EMEID).toBeUndefined();
+      expect(doc.CUHID).toBeUndefined();
+      expect(doc.CMP).toBeUndefined();
+      expect(doc.BID).toBeUndefined();
+    });
+  });
+
+  it("does not define GBLUID in the submission schema", () => {
+    expect(UBBWifiModel.schema.path("GBLUID")).toBeUndefined();
+    expect(
+      UBBWifiModel.schema
+        .indexes()
+        .some(([, options]) => options?.name?.includes("gbluid")),
+    ).toBe(false);
   });
 
   describe("indexes", () => {
@@ -86,7 +109,6 @@ describe("UBBWifiModel", () => {
       expect(indexNames).toEqual(
         expect.arrayContaining([
           "email_1",
-          "gbluid_1",
           "createdAt_-1",
           "postalCode_1",
           "email_createdAt",

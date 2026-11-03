@@ -5,6 +5,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { ErrorBoundary } from "@/components/ErrorBoundary/ErrorBoundary";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 
 describe("ErrorBoundary", () => {
   let consoleError: jest.SpyInstance;
@@ -43,7 +44,7 @@ describe("ErrorBoundary", () => {
     expect(
       screen.getByRole("heading", { name: "Something went wrong" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Render failed")).toBeInTheDocument();
+    expect(screen.getByText(GENERIC_USER_ERROR_MESSAGE)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Try again" }),
     ).toBeInTheDocument();
@@ -65,9 +66,7 @@ describe("ErrorBoundary", () => {
       </ErrorBoundary>,
     );
 
-    expect(
-      screen.getByText("An unexpected error occurred. Please try again."),
-    ).toBeInTheDocument();
+    expect(screen.getByText(GENERIC_USER_ERROR_MESSAGE)).toBeInTheDocument();
   });
 
   it("uses a custom fallback and resets the boundary when requested", () => {

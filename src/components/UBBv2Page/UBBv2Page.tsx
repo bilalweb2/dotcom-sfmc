@@ -217,7 +217,7 @@ export function UBBv2Page({ pageName, Offer }: UBBv2PageProps) {
                   party carrier. Coverage, uptime and speeds vary. Restrictions
                   on use apply. Requires battery backup during power outages,
                   sold separately. Unbreakable Wi-Fi is powered by a Ring Alarm
-                  Pro device with Ring home security functionality disabled. 
+                  Pro device with Ring home security functionality disabled.
                   Visit frontier.com/unbreakablewifi for additional product
                   details. Requires agreement to Frontier’s Backup Wi-Fi
                   Additional Terms, found at frontier.com/unbreakableterms.

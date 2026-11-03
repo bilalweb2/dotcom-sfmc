@@ -9,6 +9,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { UnsubscribePreferencesPage } from "@/components/UnsubscribePreferencesPage";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 
 // ── Mocks ─────────────────────────────────────────────────────────────────
 jest.mock("next/navigation", () => ({
@@ -441,7 +442,9 @@ describe("UnsubscribePreferencesPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Invalid email/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
 
@@ -467,7 +470,9 @@ describe("UnsubscribePreferencesPage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Network error/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
   });

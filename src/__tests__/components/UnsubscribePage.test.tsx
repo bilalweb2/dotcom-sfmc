@@ -9,6 +9,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { UnsubscribePage } from "@/components/UnsubscribePage";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 
 // ── Mocks ─────────────────────────────────────────────────────────────────
 jest.mock("next/navigation", () => ({
@@ -266,7 +267,9 @@ describe("UnsubscribePage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Email not found/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
 
@@ -289,7 +292,7 @@ describe("UnsubscribePage", () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(/Unsubscribe request failed/i),
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
         ).toBeInTheDocument();
       });
     });
@@ -311,7 +314,9 @@ describe("UnsubscribePage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Network error/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
 
@@ -330,7 +335,9 @@ describe("UnsubscribePage", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
   });

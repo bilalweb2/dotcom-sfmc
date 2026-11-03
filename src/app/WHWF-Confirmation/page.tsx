@@ -13,6 +13,6 @@ export const metadata: Metadata = {
  */
 export default function WHWFConfirmation() {
   return (
-    <WHWFConfirmationPage message="Enjoy Wi-Fi coverage where you need it." />
+    <WHWFConfirmationPage message="Enjoy Wi-Fi coverage where you need it." orderNow={false} UBB={false}/>
   );
 }

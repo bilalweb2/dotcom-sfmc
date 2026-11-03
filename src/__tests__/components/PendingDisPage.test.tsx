@@ -9,6 +9,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PendingDisPage } from "@/components/PendingDisPage";
+import { GENERIC_USER_ERROR_MESSAGE } from "@/constants";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
@@ -79,7 +80,7 @@ describe("PendingDisPage", () => {
       const user = userEvent.setup();
       (useSearchParams as jest.Mock).mockReturnValue(
         new URLSearchParams(
-          "EMEID=emeid-val&CUHID=cuhid-val&CMP=cmp-val&BID=bid-val",
+          "EMHID=emhid-val&EMEID=emeid-val&CUHID=cuhid-val&CMP=cmp-val&BID=bid-val",
         ),
       );
       (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -117,6 +118,8 @@ describe("PendingDisPage", () => {
       expect(body.PageName).toBe("Custom pending page");
       expect(body.Offer).toBe("2/mo free 500 HSI,then $19/mo");
       expect(body.ConfirmationCheckBox).toBe(true);
+      expect(body).not.toHaveProperty("GBLUID");
+      expect(body.EMHID).toBe("emhid-val");
       expect(body.EMEID).toBe("emeid-val");
       expect(body.CUHID).toBe("cuhid-val");
       expect(body.CMP).toBe("cmp-val");
@@ -182,7 +185,9 @@ describe("PendingDisPage", () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText(/Server error/)).toBeInTheDocument();
+        expect(
+          screen.getByText(GENERIC_USER_ERROR_MESSAGE),
+        ).toBeInTheDocument();
       });
     });
   });

@@ -179,7 +179,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 50px 0 93px;
+  padding: 50px 0 50px;
   background-color: #141928;
   text-align: center;
 }
@@ -195,7 +195,7 @@
   font-size: 28px;
   font-weight: 400;
   color: #ffffff;
-  margin: 0 0 25px;
+  margin: 0 0 24px;
   line-height: 1.5;
 }
 
@@ -208,9 +208,14 @@
   line-height: 1.5;
   margin: 0 auto;
 }
-
+.confirmationTagline {
+  padding-bottom: 32px;
+}
+.ubbTagline {
+  padding-bottom: 56px;
+}
 .confirmationBody {
-  margin-bottom: 23px;
+  margin-bottom: 24px;
 }
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -333,5 +338,65 @@
 @media (max-width: 400px) {
   .footerInner {
     grid-template-columns: 1fr;
+  }
+}
+/* Unbreakable Wi-Fi Battery Box */
+.batterybox {
+  margin: 0 auto;
+  width: 500px;
+  padding: 20px;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 32px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+.introSubtitle {
+  font-size: 16px;
+  font-family: "ObjectSans-Regular";;
+  font-weight: 400;
+  color: #141928;
+  line-height: 24px;
+  margin-bottom: 0;
+  padding-bottom: 32px;
+  text-align: center;
+  text-transform: none;
+}
+.introSubtitleTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: #000000;
+  line-height: 1.5;
+}
+.introSubtitleText {
+  font-size: 24px;
+  color: #000000;
+  line-height: 1.5;
+}
+.introButtonContainer {
+  text-align: center;
+  display: block;
+}
+.introButton {
+  background-color: #ff0037;
+  display: inline-block;
+  font-family: objectSans-Bold;
+  font-size: 18px;
+  border-radius: 27px;
+  color: #ffffff;
+  padding: 14px 30px;
+  line-height: 22px;
+  text-transform: uppercase;
+  text-align: center;
+  min-width: 220px;
+  text-decoration: none;
+  &:hover,&:active,&:focus {
+    text-decoration: none;
+    color: #ffffff;
+    background: #141928;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
   }
 }
