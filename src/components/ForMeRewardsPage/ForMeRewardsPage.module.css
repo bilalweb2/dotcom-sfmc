@@ -1,0 +1,881 @@
+/**
+ * @file pages/ForMeRewardsPage/ForMeRewardsPage.module.css
+ * @description Styles for the ForMeRewards landing page.
+ * Matches the Frontier brand palette: deep navy, red CTA, teal accent.
+ */
+
+/* ── Root ───────────────────────────────────────────────────────────── */
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color-scheme: light;
+  background: #ffffff;
+  color: #141928;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   SITE HEADER
+   ══════════════════════════════════════════════════════════════════════ */
+.siteHeader {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.halfBlockContainer {
+  max-width: 1232px;
+  margin: auto;
+  padding: 0 16px;
+}
+
+.offerInner {
+ width: 100%;
+ margin: 0 auto;
+ text-align: center;
+}
+
+/* ── Utility bar (top strip) ─────────────────────────────────────────── */
+.utilityBar {
+  background-color: #1a1a1a;
+  padding: 6px 0;
+}
+
+.utilityNav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  /* Mirror mainNavInner constraints so the first link sits exactly above the logo */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.utilityLink {
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 400;
+  text-decoration: none;
+  padding: 0 10px;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+
+.utilityLink:hover {
+  color: #dddddd;
+  text-decoration: underline;
+}
+
+/* Active/current segment highlight */
+.utilityLink:first-child {
+  font-weight: 600;
+  border-bottom: 2px solid #ff0037;
+  padding-bottom: 2px;
+}
+
+.utilitySep {
+  color: #555555;
+  font-size: 0.72rem;
+  user-select: none;
+}
+
+/* ── Main navigation bar ─────────────────────────────────────────────── */
+.mainNav {
+  background-color: #ff0037;
+  border-bottom: none;
+}
+
+.mainNavInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ── Logo ────────────────────────────────────────────────────────────── */
+.logoLink {
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.logoSvg {
+  width: 160px;
+  height: 42px;
+}
+
+.logoIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.logoSubtitle {
+  font-size: 0.58rem;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  align-self: flex-end;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+/* ── Primary nav ─────────────────────────────────────────────────────── */
+.primaryNav {
+  flex: 1;
+}
+
+.primaryNavList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.primaryNavItem {
+  position: relative;
+}
+
+.primaryNavLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0 16px;
+  height: 64px;
+  letter-spacing: 0.01em;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.primaryNavLink:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chevron {
+  width: 10px;
+  height: 6px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+/* ── Sign In button ──────────────────────────────────────────────────── */
+.signInButton {
+  flex-shrink: 0;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 4px;
+  /* border: 2px solid #ffffff; */
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  margin-left: auto;
+}
+
+.signInButton:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Hero (matches cloud.e.frontier.com/ForMeRewards012025) ─────────────────── */
+.hero {
+  position: relative;
+  width: 100%;
+  background-color: #141928;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 2;
+  max-width: 1440px;
+  margin: auto;
+  min-height: 500px;
+  padding: 80px 0;
+  background-image: url("/ftr-forms/images/whwf-hero.jpg");
+  background-position: center right;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.heroInner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgb(20, 25, 40) 0%,
+    rgb(20, 25, 40) 36%,
+    rgba(20, 25, 40, 0) 62%
+  );
+}
+
+.heroContainer {
+  position: relative;
+  max-width: 1232px;
+  margin: auto;
+  padding: 0;
+}
+
+.titleWrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 670px;
+  margin-left: 32px;
+  padding-left: 16px;
+}
+
+.heroTitle {
+  font-family: "BandwidthDisplay-Regular", Verdana, sans-serif;
+  margin: 16px 0;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 1.125;
+  text-transform: uppercase;
+}
+
+.tertiaryTextColor {
+  color: #ffffff;
+}
+
+.secondaryTextColor {
+  color: #96fff5;
+}
+
+.heroTitleLine {
+  display: block;
+  position: relative;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.heroTitle .heroTitleLine::before {
+  content: "";
+  display: block;
+  width: 200%;
+  left: calc(-200% - 16px);
+  top: 0;
+  height: 78%;
+  background: #ff0037;
+  position: absolute;
+}
+
+.heroImg {
+  display: none;
+  position: relative;
+}
+
+.heroPhoto {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Offer section ─────────────────────────────────────────────────── */
+.halfBlock {
+  background: #F3F4F4;
+  padding: 60px 0;
+}
+
+
+@media (min-width: 768px) {
+ 
+  .consentLabel {
+    padding-right: 4px;
+  }
+
+  .consentText {
+    padding-right: 0;
+  }
+
+  .legalText {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .columns {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}
+
+.offerHeading {
+  width: 100%;
+  padding-bottom: 30px;
+  margin: 0;
+  color: #141928;
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.19;
+}
+
+.halfBlockIntro p {
+  margin: 0;
+  text-align: center;
+}
+
+.p1 {
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 18px;
+  line-height: 1.444;
+}
+
+.introText {
+  color: #141928;
+}
+
+.learnMoreWrapper {
+  text-align: center;
+}
+
+.learnMoreButton {
+  display: inline-block;
+  width: 245px;
+  background-color: #141928;
+  border-radius: 25px;
+  color: #ffffff;
+  font-family: 'object sans regular', Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 42px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  word-spacing: 1px;
+}
+
+.learnMoreButton:hover,
+.learnMoreButton:focus-visible {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.halfBlocks .imageBlockFlex {
+  margin: 40px 0;
+}
+
+.imageBlockFlex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  gap: 24px;
+  text-align: center;
+}
+
+.imageBlockFlex .textBox {
+  max-width: 430px;
+  padding: 32px;
+}
+
+.halfBlocks .imageBlockFlex .textBox {
+  max-width: 600px;
+  flex: 0 1 48%;
+  padding: 0;
+}
+
+.imageBlockTitle {
+  margin: 0 0 16px;
+  color: #141928;
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.imageBlockFlex .p1 {
+  margin: 8px 0;
+  color: #141928;
+}
+
+.halfBlocks .imageBlockFlex .imageBox {
+  flex: 0 1 50%;
+  max-height: 400px;
+}
+
+.imageBlockFlex .imageBox {
+  flex: 0 1 700px;
+  max-height: 400px;
+  overflow: hidden;
+  border-radius: 32px;
+  background-color: #141928;
+}
+
+.imageBlockFlex .imageBox img {
+  display: table;
+  max-width: 100%;
+  margin: auto;
+}
+
+@media (min-width: 1024px) {
+  .halfBlocks .imageBlockFlex:last-of-type {
+    margin: 100px 0 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .imageBlockFlex {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .halfBlocks .imageBlockFlex .textBox {
+    flex: 1 1 auto;
+    max-width: none;
+    padding: 0;
+  }
+
+  .imageBlockFlex .textBox {
+    padding: 0;
+  }
+
+  .halfBlocks .imageBlockFlex .imageBox,
+  .imageBlockFlex .imageBox {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
+/* ── Feature block ─────────────────────────────────────────────────── */
+.featureBlock {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+  color: #141928;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 32px;
+  text-align: center;
+}
+
+.featureTitle {
+  display: block;
+  margin: 0 0 8px;
+  padding-top: 20px;
+  color: #141928;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  text-align: left;
+}
+
+.featureItem {
+  position: relative;
+  margin: 0 0 8px;
+  color: #141928;
+}
+
+.featureItem span {
+  display: block;
+  padding-left: 40px;
+  color: #141928;
+}
+
+.checkIcon {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 20px;
+  height: auto;
+}
+
+/* ── Consent ────────────────────────────────────────────────────────── */
+
+.consentForm {
+  width: 90%;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: left;
+  padding-top: 10px;
+}
+
+.consentLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+.consentCheckbox {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  accent-color: #ff0037;
+  cursor: pointer;
+}
+
+.consentText {
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  color: #141928;
+  line-height: 1.3;
+  padding-right: 10px;
+}
+
+/* ── CTA ─────────────────────────────────────────────────────────────── */
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 226px;
+  background-color: #ff0037;
+  color: #ffffff;
+  font-family: "ObjectSans-Bold", Verdana, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0.72px;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 5em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.ctaButton:hover:not(:disabled),
+.ctaButton:focus-visible:not(:disabled) {
+  background-color: #000000;
+}
+
+.ctaButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Legal footer ────────────────────────────────────────────────────── */
+.legalFooter {
+  background: #f3f4f4;
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.legalText {
+  padding-left: 15px;
+  padding-right: 15px;
+  max-width: 1202px;
+  margin: 0 auto;
+  color: #141928;
+  font-family: "ObjectSans-Regular", Verdana, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.legalText a {
+  color: #141928;
+  text-decoration: underline;
+}
+
+/* ── Form fields ─────────────────────────────────────────────────────── */
+.formRow {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 0;
+}
+
+.formRow .formField {
+  flex: 1;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.fieldLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #222222;
+}
+
+.fieldInput {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.fieldInput:focus {
+  border-color: #ff0037;
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.12);
+}
+
+/* ── Inline field / consent validation error ──────────────────────── */
+.consentCheckboxError {
+  outline: 2px solid #ff0037;
+  outline-offset: 2px;
+}
+
+.fieldError {
+  font-size: 0.8rem;
+  color: #ff0037;
+  margin: 6px 0 10px;
+}
+
+/* ── Error message ─────────────────────────────────────────────────── */
+.errorMessage {
+  font-size: 0.82rem;
+  color: #ff0037;
+  background-color: #fff5f5;
+  border: 1px solid #f5c6c6;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .mainNavInner {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .primaryNavLink {
+    padding: 0 10px;
+    font-size: 0.8rem;
+  }
+
+  .logoSvg {
+    width: 120px;
+    height: 32px;
+  }
+
+  .logoSubtitle {
+    display: none;
+  }
+
+  .utilityNav {
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .utilityLink {
+    padding: 0 6px;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .heroImg {
+    display: block;
+  }
+
+  .hero .heroImg::before {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: 0;
+    right: 0;
+    bottom: 80%;
+    background: linear-gradient(
+      0deg,
+      rgba(20, 25, 40, 0) 0,
+      rgb(20, 25, 40) 30%,
+      rgb(20, 25, 40) 0%
+    );
+  }
+
+  .heroPhoto {
+    max-width: none;
+    margin: -43px auto 0;
+  }
+
+  .heroInner {
+    min-height: auto;
+    padding: 40px 16px 40px 0;
+    background-image: none;
+  }
+
+  .heroInner::before {
+    display: none;
+  }
+
+  .titleWrapper {
+    max-width: 100%;
+    margin-left: 16px;
+  }
+}
+
+@media (max-width: 992px) {
+
+  .halfBlocks .imageBlockFlex {
+    display: block;
+    margin-top: 16px;
+  }
+  .halfBlocks .imageBlockFlex .textBox {
+    padding: 32px 16px;
+    max-width: 100%;
+  }
+  .imageBlockFlex .p1 {
+    font-size: 16px;
+  }
+  .imageBlockTitle {
+    font-size: 24px;
+  }
+  .imgstyle {
+    width: 925px;
+    height: 617px;
+  }
+  
+}
+
+@media (max-width: 767px) {
+  .heroTitle {
+    font-size: 36px;
+    line-height: 1.22;
+  }
+
+ .offerHeading {
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .halfBlock {
+    padding: 60px 0 32px;
+  }
+
+  .p1 {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .imageBlockTitle {
+    font-size: 24px;
+  }
+
+  .halfBlocks .imageBlockFlex {
+    display: block;
+    margin-top: 16px;
+  }
+  .halfBlocks .imageBlockFlex .textBox {
+    padding: 32px 16px;
+    max-width: 100%;
+    margin-bottom: 32px;
+  }
+  .imgstyle {
+    max-width: 408px;
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .offerHeading {
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  .halfBlock {
+    padding: 60px 0 32px;
+  }
+
+  .p1 {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .imageBlockTitle {
+    font-size: 24px;
+  }
+
+  .halfBlocks .imageBlockFlex {
+    display: block;
+    margin-top: 16px;
+  }
+  .halfBlocks .imageBlockFlex .textBox {
+    padding: 32px 16px;
+    max-width: 100%;
+    margin-bottom: 32px;
+  }
+  .imgstyle {
+    max-width: 408px;
+    max-height: 272px;
+  }
+
+  /*  */
+  .formRow {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .heroTitle {
+    font-size: clamp(6px, 9vw, 36px);
+  }
+
+  .ctaButton {
+    width: 100%;
+  }
+
+  .primaryNav {
+    display: none;
+  }
+
+  .mainNavInner {
+    justify-content: space-between;
+  }
+  .legalText {
+    padding: 0;
+  }
+  .consentForm {
+    padding-top: 8px;
+    width: 100%;
+  }
+  .consentLabel {
+    padding-right: 10px;
+    padding-top: 0.1em;
+  }
+
+  .consentText {
+    padding-right: 0;
+  }
+  .featureTitle {
+    line-height: 1.2;
+  }
+}

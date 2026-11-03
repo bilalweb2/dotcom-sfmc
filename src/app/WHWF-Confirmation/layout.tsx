@@ -8,3 +8,4 @@ export default function WHWFConfirmationLayout({
 }: LayoutProps<"/WHWF-Confirmation">) {
   return <PageLayout compact>{children}</PageLayout>;
 }
+ 
