@@ -29,6 +29,7 @@ export function buildContentSecurityPolicy(nonce: string): string {
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
     "connect-src 'self'",
+    "frame-src 'self' https://players.brightcove.net",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",

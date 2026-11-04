@@ -32,6 +32,9 @@ describe("buildContentSecurityPolicy", () => {
     expect(policy).not.toContain("'unsafe-eval'");
     expect(policy).toContain("style-src 'self' 'unsafe-inline'");
     expect(policy).toContain("object-src 'none'");
+    expect(policy).toContain(
+      "frame-src 'self' https://players.brightcove.net",
+    );
   });
 
   it("allows unsafe eval in development for Next.js tooling", () => {
